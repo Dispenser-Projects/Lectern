@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    display: flex;
+}
+
+.sidebar {
+    z-index: 1;
+    background-color: #fff;
+    padding: 30px;
+    color: #888;
+    box-shadow: 0 1px 8px -2px rgba(0,0,0,0.4);
+    overflow: auto;
+}
+
+.child {
+    flex: 1;
+}
+
+#wrapper {
+    width: 85%;
+}
+
+@media screen and (max-width: 1280px), screen and (max-height: 720px) {
+    #wrapper {
+        right: 300px;
+    }
+    .sidebar {
+        font-size: 14px;
+        width: 260px;
+    }
+    input {
+        max-width: 90px;
+    }
+    .modal {
+        top: 40px;
+    }
+}
