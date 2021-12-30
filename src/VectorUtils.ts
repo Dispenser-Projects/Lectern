@@ -39,3 +39,15 @@ export function rotateAboutPoint(mesh: THREE.Mesh, point: Vector3, axis: Vector3
 
     mesh.rotateOnAxis(axis, theta); // rotate the OBJECT
 }
+
+
+export function cropImage(image: HTMLImageElement, uv: number[], callback: (url: string) => void) {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext('2d');
+    canvas.width = uv[1];
+    canvas.height = uv[3];
+    image.onload = function () {
+        context.drawImage(image, uv[0], uv[1], uv[2] - uv[0], uv[1] - uv[3], 0, 0, uv[1], uv[3]);
+        callback(canvas.toDataURL());
+    };
+}

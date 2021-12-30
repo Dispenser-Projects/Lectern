@@ -3,21 +3,20 @@ import {McModel} from "./ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
 import {MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
-import {axisToVector, convertPosition, rotateAboutPoint} from "./VectorUtils";
+import {axisToVector, convertPosition, cropImage, rotateAboutPoint} from "./VectorUtils";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 import merge from 'deepmerge-json';
-import {loadTexture} from "./index";
-import FaceEnum = McModel.FaceEnum;
+import Face = McModel.Face;
 
 const backend: Backend = new ServerBackend();
 const sortArray = (array: Array<[string, string]>) => array.sort((a, b) => a[1] > b[1] ? -1 : 1)
 
 export function load(modelName: string, scene: THREE.Scene) {
     const sort = (model: Model) => sortArray(Object.entries(model.textures))
-    const load = (model: Model) => loadTextures(sort(model), new Map<string, Texture>())
+    const load = (model: Model) => loadTextures(sort(model), new Map<string, HTMLImageElement>())
     loadModel(modelName)
-        .then<[Model, Map<string, Texture>]>(model => load(model).then(map => [model, map]))
+        .then<[Model, Map<string, HTMLImageElement>]>(model => load(model).then(map => [model, map]))
         .then(model => model[0].elements.forEach(element => createElement(element, model[1], scene)))
 
 
@@ -32,7 +31,7 @@ function getName(parent: string): string {
     return parent.split("/").at(-1)
 }
 
-function loadTextures(list: Array<[string, string]>, map: Map<string, Texture>): Promise<Map<string, Texture>> {
+function loadTextures(list: Array<[string, string]>, map: Map<string, HTMLImageElement>): Promise<Map<string, HTMLImageElement>> {
     if (list.length != 0) {
         const key = list[0][0]
         const value = list[0][1]
@@ -43,14 +42,17 @@ function loadTextures(list: Array<[string, string]>, map: Map<string, Texture>):
             const image = new Image()
             return backend.getTexture(getName(value))
                 .then(base64 => image.src = "data:image/png;base64," + base64)
-                .then(_ => map.set(`#${key}`, createTexture(image)))
+                .then(_ => map.set(`#${key}`, image))
                 .then(_ => loadTextures(list.slice(1), map))
         }
     }
     return Promise.resolve(map)
 }
 
-function createTexture(image: HTMLImageElement): Texture {
+function createTexture(image: HTMLImageElement, face: Face): Texture {
+
+    const foo = (param: string) => console.log(param)
+    cropImage(image, face.uv, foo)
     const texture = new THREE.Texture()
     texture.image = image
     image.onload = () => texture.needsUpdate = true
@@ -62,7 +64,7 @@ function createTexture(image: HTMLImageElement): Texture {
 }
 
 
-function createElement(element: Element, map: Map<string, Texture>, scene: THREE.Scene): {error?: string} {
+function createElement(element: Element, map: Map<string, HTMLImageElement>, scene: THREE.Scene): {error?: string} {
     if(element.from.length != 3)
         return {error: "Size of 'from' must be equal to 3."}
     if(element.to.length != 3)
@@ -76,8 +78,15 @@ function createElement(element: Element, map: Map<string, Texture>, scene: THREE
 
     const materials = new Array<MeshBasicMaterial>(6)
 
-    for(const [key, value] of Object.entries(element.faces))
-        materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({map: map.get(getName(value.texture)), transparent: true })
+    for(const [key, value] of Object.entries(element.faces)) {
+        const image = map.get(getName(value.texture))
+        const newImage = new Image()
+        newImage.src = image.src
+        materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
+            map: createTexture(newImage, value),
+            transparent: true
+        })
+    }
 
     const mesh = new THREE.Mesh(base, materials)
     scene.add(mesh)

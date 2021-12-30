@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/sharp": "^0.29.4",
     "@types/three": "^0.133.1",
     "file-loader": "^6.2.0",
     "ts-loader": "^9.2.6",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "deepmerge-json": "^1.2.0",
+    "sharp": "^0.29.3",
     "three": "^0.134.0"
   },
   "scripts": {

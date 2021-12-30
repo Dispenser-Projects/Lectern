@@ -4,7 +4,7 @@ import Model = McModel.Model;
 
 export class ServerBackend implements Backend {
 
-    private static url = "http://localhost:8080/"
+    private static url = "http://localhost/api/"
 
     getModel(modelName: String): Promise<Model> {
         return fetch(ServerBackend.url + `model/${modelName}`).then(response => {

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="" />
+    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModelLoader.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModelLoader.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VectorUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/VectorUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/ServerBackend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/ServerBackend.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +22,9 @@
         <option value="TypeScript File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="20CVcvAgDWVmP5pWm0XuADVgLPD" />
   <component name="ProjectViewState">
@@ -28,7 +39,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
-    <property name="ts.external.directory.path" value="F:\Workbench\BlockRenderer\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -95,6 +106,14 @@
       <workItem from="1636152141403" duration="8590000" />
       <workItem from="1636197905003" duration="14430000" />
       <workItem from="1636281990198" duration="15544000" />
+      <workItem from="1636398509811" duration="1227000" />
+      <workItem from="1636449771680" duration="1294000" />
+      <workItem from="1636566300879" duration="300000" />
+      <workItem from="1636566673920" duration="283000" />
+      <workItem from="1636567345098" duration="1179000" />
+      <workItem from="1637000958247" duration="3141000" />
+      <workItem from="1637865235789" duration="5136000" />
+      <workItem from="1639055437041" duration="35000" />
     </task>
     <servers />
   </component>

@@ -7,14 +7,17 @@ import {Backend} from "./backend/Backend";
 import merge from 'deepmerge-json';
 import {McModel} from "./ModelInterface";
 import Model = McModel.Model;
+import {cropImage} from "./VectorUtils";
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer;
 let geometry, material, mesh: THREE.Mesh<THREE.BoxGeometry, THREE.MeshNormalMaterial> | THREE.Object3D<THREE.Event>;
 
-const backend: Backend = new ServerBackend();
-
 init();
 
+const image = new Image()
+image.src = "https://www.dropbox.com/s/gmuhw9kkay95v2y/glass.png?dl=1"
+const foo = (param: string) => console.log(">>>", param)
+cropImage(image, [0, 0, 16, 16], foo)
 
 function init() {
 
@@ -37,7 +40,7 @@ function init() {
 
 	scene = new THREE.Scene();
 
-	load("slime_block", scene)
+	load("anvil", scene)
 
 	renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 	renderer.setClearColor("#e5e5e5")
