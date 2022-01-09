@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sidebar.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/crafting_table_front.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/crafting_table_side.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/crafting_table_top.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/dirt.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/mycelium_side.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/mycelium_top.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/resources/oak_planks.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModelLoader.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModelLoader.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VectorUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/VectorUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/Backend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/Backend.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/RequestModel.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/ServerBackend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/ServerBackend.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
     </list>
@@ -34,6 +29,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -51,8 +47,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/public/resources" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
-    <property name="ts.external.directory.path" value="D:\Logiciels\WebStorm 2020.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="ts.external.directory.path" value="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -62,6 +58,7 @@
       <recent name="F:\Workbench\BlockRenderer\dist" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\resources" />
       <recent name="F:\Workbench\BlockRenderer\src" />
       <recent name="F:\Workbench\BlockRenderer\public" />
       <recent name="F:\Workbench\BlockRenderer\src\scripts" />
@@ -148,6 +145,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
