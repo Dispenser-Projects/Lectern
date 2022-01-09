@@ -9,9 +9,9 @@ Resources (models, textures, etc) are provided by a [REST API backend](https://g
 ## Versions
 
 
-|  Versions |    Support     |                                 Features                                 |
-|-----------|----------------|--------------------------------------------------------------------------|
-| 1.3.X     | Planned        | Load custom resource pack                                                |
-| 1.2.X     | Planned        | Possibility to select block instead model and switch between blockstates |
-| 1.1.X     | In development | Manage animated textures                                                 |
-| 1.0.X     | Current        | Load and render all types of block model                                 |
+|  Versions |    Support     |                                    Features                                    |
+|-----------|----------------|--------------------------------------------------------------------------------|
+| 1.3.X     | Planned        | Load custom resource pack                                                      |
+| 1.2.X     | Planned        | Possibility to select block instead of model and to switch between blockstates |
+| 1.1.X     | In development | Manage animated textures                                                       |
+| 1.0.X     | Current        | Load and render all types of block model                                       |
