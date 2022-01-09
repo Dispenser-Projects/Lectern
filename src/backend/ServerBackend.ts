@@ -15,7 +15,7 @@ export class ServerBackend implements Backend {
         }).catch(error => {
             console.log(error)
             return Promise.reject();
-        }) as Promise<Model>
+        }).then(this.setDefaultValue) as Promise<Model>
     }
 
     getTexture(textureName: String): Promise<string> {
@@ -28,5 +28,16 @@ export class ServerBackend implements Backend {
             console.log(error)
             return Promise.reject();
         }) as Promise<string>
+    }
+
+    private setDefaultValue(model: Model): Model {
+        if(model.elements !== undefined)
+            for(const value of model.elements.flatMap(element => Object.values(element.faces))) {
+                if(value.uv === undefined)
+                    value.uv = [0, 0, 16, 16]
+                if(value.rotation === undefined)
+                    value.rotation = 0
+            }
+        return model
     }
 }

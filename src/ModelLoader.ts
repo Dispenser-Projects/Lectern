@@ -3,7 +3,7 @@ import {McModel} from "./ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
 import {MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
-import {axisToVector, convertPosition, cropImage, rotateAboutPoint} from "./VectorUtils";
+import {axisToVector, convertPosition, rotateAboutPoint} from "./VectorUtils";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 import merge from 'deepmerge-json';
@@ -49,15 +49,9 @@ function loadTextures(list: Array<[string, string]>, map: Map<string, HTMLImageE
     return Promise.resolve(map)
 }
 
-function createTexture(image: HTMLImageElement, face: Face): Texture {
-
-    const foo = (param: string) => console.log(param)
-    cropImage(image, face.uv, foo)
-    const texture = new THREE.Texture()
-    texture.image = image
+function createTexture(image: HTMLImageElement): Texture {
+    let texture = new THREE.Texture(image)
     image.onload = () => texture.needsUpdate = true
-    //console.log(map)
-    console.log(texture.image)
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.LinearFilter
     return texture
@@ -78,14 +72,20 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
 
     const materials = new Array<MeshBasicMaterial>(6)
 
-    for(const [key, value] of Object.entries(element.faces)) {
+    for (const [key, value] of Object.entries(element.faces)) {
+
         const image = map.get(getName(value.texture))
         const newImage = new Image()
         newImage.src = image.src
+        const texture = createTexture(newImage);
         materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
-            map: createTexture(newImage, value),
-            transparent: true
+            map: texture,
+            transparent: true,
+            alphaTest: 0.5
         })
+        if(value.rotation === undefined)
+            value.rotation = 0
+        updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, faceToIndex(key), value.rotation)
     }
 
     const mesh = new THREE.Mesh(base, materials)
@@ -100,6 +100,9 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
         const origin = new Vector3(element.rotation.origin[0], element.rotation.origin[1], element.rotation.origin[2])
         rotateAboutPoint(mesh, convertPosition(0, 0, 0, origin), axis.normalize(), MathUtils.degToRad(element.rotation.angle), false)
     }
+
+    console.log("geometry", base)
+    console.log("mesh", mesh)
 }
 
 function faceToIndex(face: string): number {
@@ -111,4 +114,46 @@ function faceToIndex(face: string): number {
         case McModel.FaceEnum.SOUTH: return 4
         case McModel.FaceEnum.NORTH: return 5
     }
+}
+
+function updateTextureCoords(x1: number, y1: number, x2: number, y2: number, geometry: THREE.BoxGeometry, face: number, angle: number) {
+    const faceUvArray = rotateUv(angle, [x1 / 16, (16 - y1) / 16], [x2 / 16, (16 - y1) / 16], [x1 / 16, (16 - y2) / 16], [x2 / 16, (16 - y2) / 16])
+
+    const array = Float32Array.from(geometry.getAttribute("uv").array)
+    for(let i = 0; i < 8; i++)
+        array[face * 8 + i] = faceUvArray[i]
+
+    geometry.setAttribute("uv", new THREE.BufferAttribute(array, 2));
+    geometry.attributes.uv.needsUpdate = true;
+}
+
+function rotateUv(rotation: number, topLeft: [number, number], topRight: [number, number], bottomLeft: [number, number], bottomRight: [number, number]): Array<number> {
+    if (rotation == 90) {
+        return [
+            ...bottomLeft,
+            ...topLeft,
+            ...bottomRight,
+            ...topRight
+        ]
+    } else if (rotation == 180) {
+        return [
+            ...bottomRight,
+            ...bottomLeft,
+            ...topRight,
+            ...topLeft
+        ]
+    } else if (rotation == 270) {
+        return [
+            ...topRight,
+            ...bottomRight,
+            ...topLeft,
+            ...bottomLeft
+        ]
+    }
+    return [
+        ...topLeft,
+        ...topRight,
+        ...bottomLeft,
+        ...bottomRight
+    ]
 }

@@ -1,37 +1,117 @@
+:root {
+    --white: #afafaf;
+    --bodyColor: #292a2b;
+    --borderFormEls: hsl(0, 0%, 10%);
+    --bgFormEls: hsl(0, 0%, 14%);
+    --buttonHover: hsl(0, 0%, 20%)
+}
+
 body {
     margin: 0;
-    display: flex;
+}
+
+.sidebarWithButton {
+    right: 0;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
 }
 
 .sidebar {
-    z-index: 1;
-    background-color: #fff;
-    padding: 30px;
-    color: #888;
-    box-shadow: 0 1px 8px -2px rgba(0,0,0,0.4);
-    overflow: auto;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: var(--bodyColor);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
 }
 
-.child {
-    flex: 1;
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: var(--white);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar .element {
+    margin: 8px 8px 8px 8px;
+
+    font-size: 1.3em;
+    border: 1px solid var(--borderFormEls);
+    color: var(--white);
+    background: var(--bgFormEls);
+}
+
+.element + input {
+    padding: 4px 4px 4px 0;
+}
+
+.element + button {
+    padding: 4px 10% 4px 10%;
+}
+
+.element + button:hover {
+    background: var(--buttonHover);
+    cursor: pointer;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.container {
+    width: 100%;
+    text-align:center
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: var(--bodyColor);
+    color: var(--white);
+    padding: 10px 15px;
+    border: none;
+    z-index: 1;
+    top: 94%;
+    right: 0;
+    position: relative;
+    border-radius: 50% 0 0 50%;
+}
+
+.openbtn:hover {
+    background-color: #444;
+}
+
+#main {
+    transition: margin-right .5s;
+    /*padding: 16px;*/
 }
 
 #wrapper {
-    width: 85%;
+    position: absolute;
+    display: inline-block;
 }
 
-@media screen and (max-width: 1280px), screen and (max-height: 720px) {
-    #wrapper {
-        right: 300px;
-    }
-    .sidebar {
-        font-size: 14px;
-        width: 260px;
-    }
-    input {
-        max-width: 90px;
-    }
-    .modal {
-        top: 40px;
-    }
+canvas {
+    position: absolute;
+    z-index: 0;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
 }

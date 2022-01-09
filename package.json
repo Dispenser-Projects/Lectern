@@ -1,4 +1,8 @@
 {
+  "name": "block_renderer",
+  "version": "1.0.0",
+  "description": "Allow to display Minecraft block model",
+  "author": "Théo Giraudet",
   "devDependencies": {
     "@types/sharp": "^0.29.4",
     "@types/three": "^0.133.1",

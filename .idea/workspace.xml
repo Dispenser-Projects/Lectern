@@ -5,6 +5,15 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/crafting_table_front.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/crafting_table_side.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/crafting_table_top.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/dirt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/mycelium_side.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/mycelium_top.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/resources/oak_planks.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModelLoader.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModelLoader.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VectorUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/VectorUtils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/ServerBackend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/ServerBackend.ts" afterDir="false" />
@@ -26,7 +35,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="20CVcvAgDWVmP5pWm0XuADVgLPD" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -39,7 +52,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
-    <property name="ts.external.directory.path" value="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="D:\Logiciels\WebStorm 2020.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -114,11 +127,27 @@
       <workItem from="1637000958247" duration="3141000" />
       <workItem from="1637865235789" duration="5136000" />
       <workItem from="1639055437041" duration="35000" />
+      <workItem from="1640902719124" duration="1140000" />
+      <workItem from="1640985006818" duration="6094000" />
+      <workItem from="1641590929719" duration="9958000" />
+      <workItem from="1641636276328" duration="13300000" />
+      <workItem from="1641726866403" duration="8872000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
