@@ -1,4 +1,4 @@
-import {McModel} from "../ModelInterface";
+import {McModel} from "../models/ModelInterface";
 import Model = McModel.Model;
 
 /**
@@ -20,6 +20,13 @@ export interface Backend {
      * @return a promise for the texture
      * @throws an error if the texture is invalid
      */
-    getTexture(textureName: string): Promise<string>
+    getTexture(textureName: string): string
+
+    /**
+     * Request the list of all models
+     * @return the list of all models
+     * @throws an error if the query is invalid
+     */
+    getAllModel(): Promise<Array<string>>
 
 }

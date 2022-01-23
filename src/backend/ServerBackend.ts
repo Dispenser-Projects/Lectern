@@ -1,5 +1,6 @@
 import {Backend} from "./Backend";
-import {McModel} from "../ModelInterface";
+import {McModel} from "../models/ModelInterface";
+import {Page} from "../models/ModelListInterface"
 import Model = McModel.Model;
 import {properties} from "../resources/Properties";
 
@@ -8,6 +9,8 @@ import {properties} from "../resources/Properties";
  */
 export class ServerBackend implements Backend {
 
+    private modelArray: Array<string>
+
     /**
      * Request <i>modelName</i> model to the backend
      * @param modelName the name of the model to request
@@ -15,7 +18,7 @@ export class ServerBackend implements Backend {
      * @throws an error if the model is invalid
      */
     getModel(modelName: string): Promise<Model> {
-        return fetch(properties.backend_url + `model/${modelName}`).then(response => {
+        return fetch(properties.backend_url_model + modelName).then(response => {
             if (response.ok)
                 return response.json();
             else
@@ -32,16 +35,8 @@ export class ServerBackend implements Backend {
      * @return a promise for the texture
      * @throws an error if the texture is invalid
      */
-    getTexture(textureName: string): Promise<string> {
-        return fetch(properties.backend_url + `texture/block/${textureName}`).then(response => {
-            if (response.ok)
-                return response.text();
-            else
-                throw new Error("Invalid Texture");
-        }).catch(error => {
-            console.log(error)
-            return Promise.reject();
-        }) as Promise<string>
+    getTexture(textureName: string): string {
+        return properties.backend_url_texture + textureName
     }
 
     /**
@@ -59,5 +54,27 @@ export class ServerBackend implements Backend {
                     value.rotation = 0
             }
         return model
+    }
+
+    /**
+     * Request the list of all models
+     * @return the list of all models
+     * @throws an error if the query is invalid
+     */
+    getAllModel(): Promise<Array<string>> {
+        if(this.modelArray != null)
+            return new Promise(() => this.modelArray)
+
+        return (fetch(properties.backend_url_all_models + "?limit=9999").then(response => {
+            if (response.ok)
+                return response.json();
+            else
+                throw new Error("Invalid URL");
+        }).catch(error => {
+            console.log(error)
+            return Promise.reject();
+        }) as Promise<Page>)
+            .then(page => page.elements.map(element => element.id))
+            .then(array => this.modelArray = array.sort())
     }
 }

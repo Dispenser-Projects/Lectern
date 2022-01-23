@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {McModel} from "./ModelInterface";
+import {McModel} from "./models/ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
 import {MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
@@ -62,11 +62,15 @@ function loadTextureImages(list: Array<[string, string]>, map: Map<string, HTMLI
             return loadTextureImages(list.slice(1), map)
         } else {
             const image = new Image()
+            image.crossOrigin = "anonymous"
+            image.src = backend.getTexture(getName(value))
+            map.set(`#${key}`, image)
+            return loadTextureImages(list.slice(1), map)
             // Load texture from backend and add to the map
-            return backend.getTexture(getName(value))
-                .then(base64 => image.src = "data:image/png;base64," + base64)
+            /*return backend.getTexture(getName(value))
+                .then(base64 => {console.log(base64); image.src = base64})
                 .then(_ => map.set(`#${key}`, image))
-                .then(_ => loadTextureImages(list.slice(1), map))
+                .then(_ => loadTextureImages(list.slice(1), map))*/
         }
     }
     return Promise.resolve(map)
@@ -108,6 +112,7 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
     for (const [key, value] of Object.entries(element.faces)) {
         const image = map.get(getName(value.texture))
         const newImage = new Image()
+        newImage.crossOrigin = image.crossOrigin
         newImage.src = image.src
         const texture = createTexture(newImage);
         materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({

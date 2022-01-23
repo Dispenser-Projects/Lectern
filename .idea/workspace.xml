@@ -2,17 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sidebar.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ModelListInterface.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModelInterface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ModelInterface.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModelLoader.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModelLoader.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VectorUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/VectorUtils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/Backend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/Backend.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/backend/RequestModel.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/ServerBackend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/ServerBackend.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/Properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sidebar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sidebar.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +23,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="JavaScript File" />
         <option value="TypeScript File" />
       </list>
     </option>
@@ -48,7 +49,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="ts.external.directory.path" value="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="F:\Workbench\BlockRenderer\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -58,8 +59,9 @@
       <recent name="F:\Workbench\BlockRenderer\dist" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\resources" />
+      <recent name="F:\Workbench\BlockRenderer\src\models" />
       <recent name="F:\Workbench\BlockRenderer\src" />
+      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\resources" />
       <recent name="F:\Workbench\BlockRenderer\public" />
       <recent name="F:\Workbench\BlockRenderer\src\scripts" />
     </key>
@@ -145,7 +147,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

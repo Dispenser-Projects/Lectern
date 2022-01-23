@@ -1,6 +1,6 @@
 import {Vector3} from "three";
 import * as THREE from "three";
-import {McModel} from "./ModelInterface";
+import {McModel} from "./models/ModelInterface";
 import Axis = McModel.Axis;
 
 /**
