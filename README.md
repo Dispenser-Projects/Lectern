@@ -6,6 +6,8 @@ Resources (models, textures, etc) are provided by a [REST API backend](https://g
 
 ![](/docs/images/img.png)
 
+A hosted version is disponible [here](https://dispenser.gunivers.net/block-renderer/). Thanks to Gunivers for supporting and hosting this project!
+
 ## Versions
 
 
