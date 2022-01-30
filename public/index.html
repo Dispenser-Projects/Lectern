@@ -7,49 +7,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="font-mono bg-background text-text">
 <div id="wrapper" class="child">
 
 </div>
-<div id="sidebar" class="sidebar open bg-gray-900 text-white fixed top-0 right-0 bottom-0">
+<div id="sidebar" class="sidebar open bg-paper text-white fixed top-0 right-0 bottom-0">
     <div class="sidebar-button-open-container h-0 w-min -translate-x-full">
-        <button id="sidebarOpenButton" class="bg-gray-900 py-3 px-4 text-xl rounded-l-full hover:bg-gray-700">☰</button>
+        <button id="sidebarOpenButton" class="bg-paper py-3 px-4 text-xl rounded-l-full hover:bg-gray-700">☰</button>
     </div>
-    <div class="sidebar-container px-5 py-7 space-y-7">
+    <div class="sidebar-container px-5 py-7 space-y-7 flex flex-col h-full">
         <header>
-            <!-- <button id="sidebarCloseButton">×</button> -->
             <h1 class="text-4xl">Block Renderer</h1>
         </header>
     
-        <div class="space-y-4">
+        <div class="space-y-4 flex-grow">
             <div class="relative">
-                <input id="modelInput" type="search" placeholder="Model name", autocomplete="off" class="bg-gray-800 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-gray-400/50 focus:ring-gray-400 outline-none">
-                <ul id="modelAutocomplete" class="autocomplete-list hidden bg-gray-800 m-0 absolute inset-x-0 divide-y divide-white/10"></ul>
+                <input id="modelInput" type="search" placeholder="Model name", autocomplete="off" class="bg-paper-400 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-text/20 focus:ring-text/50 outline-none">
+                <ul id="modelAutocomplete" class="autocomplete-list hidden bg-paper-400 m-0 absolute max-h-screen overflow-y-auto inset-x-0 divide-y divide-white/10"></ul>
             </div>
-            <button id="modelValidateButton" class="w-full bg-gray-800 text-center px-4 py-3 uppercase hover:bg-white/10 active:bg-white/50 transition-colors font-bold">Validate</button>
+            <button id="modelValidateButton" class="w-full bg-paper-400 text-center px-4 py-3 uppercase hover:bg-paper-300 active:bg-paper-200 transition-colors font-bold">Validate</button>
         </div>
+
+        <footer>
+            <p>
+                ©theogiraudet & Gunivers
+                <br>
+                <a href="https://github.com/theogiraudet/Minecraft-Block-Renderer">Github</a>
+                -
+                <a href="https://discord.gg/J7f4WynJq9">Discord</a>
+                -
+                <a href="https://gunivers.net/">Gunivers</a>
+            </p>
+        </footer>
     </div>
 </div>
-
-<!-- <div id="sidebar" class="sidebar">
-    <div class="sidebar-button-open-container">
-        <button id="sidebarOpenButton" class="sidebar-open-button bg-gray-900 py-3 px-4 text-xl rounded-l-full">☰</button>
-    </div>
-    <div class="sidebar-container px-5 py-7 space-y-7">
-        <header class="sidebar-header">
-            <button id="sidebarCloseButton">×</button>
-            <h1 class="text-4xl">Block Renderer</h1>
-        </header>
-    
-        <div id="sidebarContent" class="">
-            <div class="modelInputContainer">
-                <input id="modelInput" type="text" placeholder="Model name", autocomplete="off">
-                <ul id="modelAutocomplete"></ul>
-            </div>
-            <button id="modelValidateButton" class="">Validate</button>
-        </div>
-    </div>
-</div> -->
 
 <script src="bundle.js"></script>
 </body>
