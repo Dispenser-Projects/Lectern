@@ -1,23 +1,5 @@
-:root {
-    --white: #afafaf;
-    --bodyColor: #292a2b;
-    --borderFormEls: hsl(0, 0%, 10%);
-    --bgFormEls: hsl(0, 0%, 14%);
-    --buttonHover: hsl(0, 0%, 20%)
-}
 
-body {
-    margin: 0;
-}
-
-.sidebarWithButton {
-    right: 0;
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-}
-
-.sidebar {
+#sidebar {
     height: 100%;
     width: 0;
     position: fixed;
@@ -77,19 +59,7 @@ body {
     margin-left: 50px;
 }
 
-#openButton {
-    font-size: 20px;
-    cursor: pointer;
-    background-color: var(--bodyColor);
-    color: var(--white);
-    padding: 10px 15px;
-    border: none;
-    z-index: 1;
-    top: 94%;
-    right: 0;
-    position: relative;
-    border-radius: 50% 0 0 50%;
-}
+
 
 #openButton:hover {
     background-color: #444;
@@ -162,3 +132,98 @@ input[type=submit] {
     background-color: DodgerBlue !important;
     color: #ffffff;
 }
+
+
+
+
+
+
+
+/* :root {
+    --text-color: rgba(245, 245, 245, 1);
+    --color-inactive: rgba(245, 245, 245, 0.6);
+    --bg-main: #0d1518;
+    --bg-paper: #1a2327;
+    --bg-sidebar: var(--bg-paper);
+    --sidebar-width: 400px;
+    --component-border: solid 3px var(--text-color);
+    --component-radius: 0.3rem;
+} */
+
+/* body {
+    margin: 0;
+    padding: 0;
+
+    background-color: var(--bg-main);
+    font-family: 'Roboto', sans-serif;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Roboto Mono', monospace;
+} */
+
+/* #sidebar{
+    position: fixed;
+    right:0;
+    top: 0;
+    bottom:0;
+    transition: 0.5s transform cubic-bezier(.5,.01,1,.69);
+    transform: translateX(100%);
+    max-width: var(--sidebar-width);
+    background-color: var(--bg-sidebar);
+    color: var(--text-color)
+}
+
+#sidebar.open{
+    transform: translateX(0);
+    transition: 0.4s transform cubic-bezier(0,.01,.32,1.01);
+}
+
+#sidebarOpenButton {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: var(--bg-sidebar);
+    color: var(--white);
+    padding: 10px 15px;
+    border: none;
+    z-index: 1;
+    border-radius: 50% 0 0 50%;
+}
+
+#sidebarOpenContainer{
+    transform: translateX(calc(-100% + 2px));
+    width: min-content;
+    height: 0;
+}
+
+#sidebarHeader{
+    padding: 0.5rem 1.5rem;
+}
+
+#sidebarContent{
+    padding: 1rem 1.5rem 0 1.5rem;
+}
+
+#sidebarContent input{
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.1em;
+}
+
+input{
+    background-color: var(--bg-paper);
+    color: var(--text-color);
+    border: var(--component-border);
+    border-color: var(--color-inactive);
+    border-radius: var(--component-radius);
+    transition: 0.2s border-color;
+}
+
+input:hover, input:active{
+    border-color: var(--text-color);
+    transition: 0.5s border-color;
+} */

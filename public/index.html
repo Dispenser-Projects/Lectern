@@ -3,27 +3,54 @@
 <head>
     <meta charset="utf-8">
     <title>Block Renderer</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="wrapper" class="child">
 
 </div>
-<div class="sidebarWithButton">
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" id="closeButton">×</a>
-        <div class="container">
-            <div class="autocomplete">
-                <label for="modelInput"></label><input class="element" id="modelInput" type="text" name="name" size="15" placeholder="Model name", autocomplete="off">
+<div id="sidebar" class="sidebar open bg-gray-900 text-white fixed top-0 right-0 bottom-0">
+    <div class="sidebar-button-open-container h-0 w-min -translate-x-full">
+        <button id="sidebarOpenButton" class="bg-gray-900 py-3 px-4 text-xl rounded-l-full hover:bg-gray-700">☰</button>
+    </div>
+    <div class="sidebar-container px-5 py-7 space-y-7">
+        <header>
+            <!-- <button id="sidebarCloseButton">×</button> -->
+            <h1 class="text-4xl">Block Renderer</h1>
+        </header>
+    
+        <div class="space-y-4">
+            <div class="relative">
+                <input id="modelInput" type="search" placeholder="Model name", autocomplete="off" class="bg-gray-800 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-gray-400/50 focus:ring-gray-400 outline-none">
+                <ul id="modelAutocomplete" class="autocomplete-list hidden bg-gray-800 m-0 absolute inset-x-0 divide-y divide-white/10"></ul>
             </div>
-            <button class="element" id="validateButton">Validate</button>
+            <button id="modelValidateButton" class="w-full bg-gray-800 text-center px-4 py-3 uppercase hover:bg-white/10 active:bg-white/50 transition-colors font-bold">Validate</button>
         </div>
     </div>
-
-    <div id="main">
-        <button id="openButton">☰</button>
-    </div>
 </div>
+
+<!-- <div id="sidebar" class="sidebar">
+    <div class="sidebar-button-open-container">
+        <button id="sidebarOpenButton" class="sidebar-open-button bg-gray-900 py-3 px-4 text-xl rounded-l-full">☰</button>
+    </div>
+    <div class="sidebar-container px-5 py-7 space-y-7">
+        <header class="sidebar-header">
+            <button id="sidebarCloseButton">×</button>
+            <h1 class="text-4xl">Block Renderer</h1>
+        </header>
+    
+        <div id="sidebarContent" class="">
+            <div class="modelInputContainer">
+                <input id="modelInput" type="text" placeholder="Model name", autocomplete="off">
+                <ul id="modelAutocomplete"></ul>
+            </div>
+            <button id="modelValidateButton" class="">Validate</button>
+        </div>
+    </div>
+</div> -->
+
 <script src="bundle.js"></script>
 </body>
 </html>
