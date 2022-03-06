@@ -1,0 +1,17 @@
+/* https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction */
+
+.sidebar{
+    @apply translate-x-full transition-transform;
+}
+
+.sidebar.open{
+    @apply translate-x-0 transition-transform;
+}
+
+.autocomplete-list li{
+    @apply px-4 py-2 cursor-pointer w-full truncate;
+}
+
+.autocomplete-list li:hover{
+    @apply bg-white/10;
+}

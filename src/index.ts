@@ -3,6 +3,8 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {load} from './ModelLoader';
 import "./sidebar"
 
+import "./styles/index.css"
+
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer;
 
 initialize();

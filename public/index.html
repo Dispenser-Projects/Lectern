@@ -3,27 +3,43 @@
 <head>
     <meta charset="utf-8">
     <title>Block Renderer</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="font-mono bg-background text-text">
 <div id="wrapper" class="child">
 
 </div>
-<div class="sidebarWithButton">
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" id="closeButton">×</a>
-        <div class="container">
-            <div class="autocomplete">
-                <label for="modelInput"></label><input class="element" id="modelInput" type="text" name="name" size="15" placeholder="Model name", autocomplete="off">
-            </div>
-            <button class="element" id="validateButton">Validate</button>
-        </div>
+<div id="sidebar" class="sidebar open bg-paper text-white fixed top-0 right-0 bottom-0">
+    <div class="sidebar-button-open-container h-0 w-min -translate-x-full">
+        <button id="sidebarOpenButton" class="bg-paper py-3 px-4 text-xl rounded-l-full hover:bg-gray-700">☰</button>
     </div>
+    <div class="sidebar-container px-5 py-7 space-y-7 flex flex-col h-full">
+        <header>
+            <h1 class="text-4xl">Block Renderer</h1>
+        </header>
+    
+        <div class="space-y-4 flex-grow">
+            <div class="relative">
+                <input id="modelInput" type="search" placeholder="Model name", autocomplete="off" class="bg-paper-400 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-text/20 focus:ring-text/50 outline-none">
+                <ul id="modelAutocomplete" class="autocomplete-list hidden bg-paper-400 m-0 absolute max-h-screen overflow-y-auto inset-x-0 divide-y divide-white/10"></ul>
+            </div>
+            <button id="modelValidateButton" class="w-full bg-paper-400 text-center px-4 py-3 uppercase hover:bg-paper-300 active:bg-paper-200 transition-colors font-bold">Validate</button>
+        </div>
 
-    <div id="main">
-        <button id="openButton">☰</button>
+        <footer>
+            <p>
+                <a href="https://github.com/theogiraudet">theogiraudet</a> & <a href="https://gunivers.net/">Gunivers</a>
+                <br>
+                <a href="https://github.com/theogiraudet/Minecraft-Block-Renderer">Github</a>
+                -
+                <a href="https://discord.gg/J7f4WynJq9">Discord</a>
+            </p>
+        </footer>
     </div>
 </div>
+
 <script src="bundle.js"></script>
 </body>
 </html>

@@ -2,17 +2,22 @@ import {loadModel} from "./index";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
+import "./styles/sidebar.css"
+
 const backend: Backend = new ServerBackend();
 
+let sidebar = document.getElementById("sidebar")
 /* Events */
-document.getElementById("validateButton").onclick =
+document.getElementById("modelValidateButton").onclick =
     () => loadModel((<HTMLInputElement>document.getElementById("modelInput")).value)
 
-document.getElementById("openButton").onclick = clickButton
+document.getElementById("sidebarOpenButton").onclick = clickButton
 
 document.getElementById("modelInput").onkeydown = pressEnter
 
-document.getElementById("closeButton").onclick = closeNav
+let modelAutocompleteList = document.getElementById('modelAutocomplete');
+
+// document.getElementById("sidebarCloseButton").onclick = closeNav
 
 backend.getAllModel().then(list => autocomplete(document.getElementById("modelInput") as HTMLInputElement, list))
 
@@ -20,23 +25,19 @@ let open = false;
 let autocompleteOpen = false
 
 function clickButton() {
-    if (!open) {
-        document.getElementById("mySidebar").style.width = "250px";
-        document.getElementById("main").style.marginRight = "250px";
-        open = true;
+    if (!sidebar.classList.contains('open')) {
+        sidebar.classList.add('open')
     } else
         closeNav()
 }
 
 function closeNav() {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginRight = "0";
-    open = false;
+    sidebar.classList.remove('open')
 }
 
 function pressEnter(event: KeyboardEvent) {
     if (event.key === "Enter" && !autocompleteOpen)
-        document.getElementById("validateButton").click()
+        document.getElementById("modelValidateButton").click()
 }
 
 
@@ -52,18 +53,21 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
         autocompleteOpen = true
         if (!val) { return false;}
         currentFocus = -1;
+        a = modelAutocompleteList
+        modelAutocompleteList.classList.remove("hidden")
+        a.innerHTML = ''
         /*create a DIV element that will contain the items (values):*/
-        a = document.createElement("DIV");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
+        // a = document.createElement("DIV");
+        // a.setAttribute("id", this.id + "autocomplete-list");
+        // a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
-        this.parentNode.appendChild(a);
+        // this.parentNode.appendChild(a);
         /*for each item in the array...*/
         for (let element of arr) {
             /*check if the item starts with the same letters as the text field value:*/
             if (element.toLowerCase().includes(val.toLowerCase())) {
                 /*create a DIV element for each matching element:*/
-                b = document.createElement("DIV");
+                b = document.createElement("li");
                 /*make the matching letters bold:*/
                 const index = element.toLowerCase().indexOf(val.toLowerCase())
                 b.innerHTML = element.substr(0, index)
@@ -127,6 +131,9 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
     function closeAllLists(element: EventTarget) {
         /*close all autocomplete lists in the document,
         except the one passed as an argument:*/
+        if (!element) {
+            modelAutocompleteList.classList.add("hidden")
+        }
         let x = document.getElementsByClassName("autocomplete-items");
         for (let i = 0; i < x.length; i++) {
             if (element !== x[i] && element !== inp) {
