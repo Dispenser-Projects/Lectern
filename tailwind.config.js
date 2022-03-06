@@ -1,3 +1,12 @@
+function withOpacityValue(variable) {
+  return ({ opacityValue }) => {
+    if (opacityValue === undefined) {
+      return `rgb(var(${variable}))`
+    }
+    return `rgb(var(${variable}) / ${opacityValue})`
+  }
+}
+
 module.exports = {
   content: ["./src/**/*.{html,js}", "./public/**/*.{html,js}"],
   theme: {
@@ -8,7 +17,7 @@ module.exports = {
     extend: {
       colors: {
         primary: '#3062eb',
-        text: '#f5f5f5',
+        text: withOpacityValue('--color-text'),
         'paper': {
           DEFAULT: '#1A2327',
           '50': '#707BA0',

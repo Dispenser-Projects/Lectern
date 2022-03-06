@@ -21,6 +21,12 @@ let modelAutocompleteList = document.getElementById('modelAutocomplete');
 
 backend.getAllModel().then(list => autocomplete(document.getElementById("modelInput") as HTMLInputElement, list))
 
+let appVersion = require('./../package.json').version;
+let appVersionNode = document.getElementById('appVersion');
+appVersionNode.innerText = appVersion
+appVersionNode.classList.remove('d-none');
+
+
 let open = false;
 let autocompleteOpen = false
 
