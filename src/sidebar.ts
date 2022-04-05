@@ -46,6 +46,27 @@ function pressEnter(event: KeyboardEvent) {
         document.getElementById("modelValidateButton").click()
 }
 
+function levenshteinDistance(str1: string, str2: string): number {
+    const track = Array(str2.length + 1).fill(null).map(() =>
+        Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) {
+        track[0][i] = i;
+    }
+    for (let j = 0; j <= str2.length; j += 1) {
+        track[j][0] = j;
+    }
+    for (let j = 1; j <= str2.length; j += 1) {
+        for (let i = 1; i <= str1.length; i += 1) {
+            const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+            track[j][i] = Math.min(
+                track[j][i - 1] + 1, // deletion
+                track[j - 1][i] + 1, // insertion
+                track[j - 1][i - 1] + indicator, // substitution
+            );
+        }
+    }
+    return track[str2.length][str1.length];
+}
 
 function autocomplete(inp: HTMLInputElement, arr: string[]) {
     /*the autocomplete function takes two arguments,
@@ -53,7 +74,7 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
     let currentFocus: number;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(_) {
-        let a, b, i, val = this.value;
+        let a: any, b: any, val = this.value;
         /*close any already open lists of autocompleted values*/
         closeAllLists(null);
         autocompleteOpen = true
@@ -69,30 +90,34 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
         /*append the DIV element as a child of the autocomplete container:*/
         // this.parentNode.appendChild(a);
         /*for each item in the array...*/
-        for (let element of arr) {
-            /*check if the item starts with the same letters as the text field value:*/
-            if (element.toLowerCase().includes(val.toLowerCase())) {
-                /*create a DIV element for each matching element:*/
-                b = document.createElement("li");
-                /*make the matching letters bold:*/
-                const index = element.toLowerCase().indexOf(val.toLowerCase())
-                b.innerHTML = element.substr(0, index)
-                b.innerHTML += "<strong>" + element.substr(index, val.length) + "</strong>";
-                b.innerHTML += element.substr(index + val.length);
-                /*insert a input field that will hold the current array item's value:*/
-                b.innerHTML += "<input type='hidden' value='" + element + "'>";
-                /*execute a function when someone clicks on the item value (DIV element):*/
-                b.addEventListener("click", function(_) {
-                    /*insert the value for the autocomplete text field:*/
-                    inp.value = this.getElementsByTagName("input")[0].value;
-                    /*close the list of autocompleted values,
-                    (or any other open lists of autocompleted values:*/
-                    closeAllLists(null);
-                });
-                a.appendChild(b);
-            }
-        }
+        arr.filter(e => e.includes(val.toLowerCase()))
+            .map(s => [levenshteinDistance(val, s), s] as [number, string])
+            .sort((s1, s2) => s1[0] - s2[0])
+            .map(s => toHtmlElement(s[1], val, b))
+            .forEach(v => a.append(v))
+
     });
+
+    function toHtmlElement(str: string, searchedValue: string, b: any): string {
+        b = document.createElement("li");
+        /*make the matching letters bold:*/
+        const index = str.toLowerCase().indexOf(searchedValue.toLowerCase())
+        b.innerHTML = str.substr(0, index)
+        b.innerHTML += "<strong>" + str.substr(index, searchedValue.length) + "</strong>";
+        b.innerHTML += str.substr(index + searchedValue.length);
+        /*insert a input field that will hold the current array item's value:*/
+        b.innerHTML += "<input type='hidden' value='" + str + "'>";
+        /*execute a function when someone clicks on the item value (DIV element):*/
+        b.addEventListener("click", function(_: any) {
+            /*insert the value for the autocomplete text field:*/
+            inp.value = this.getElementsByTagName("input")[0].value;
+            /*close the list of autocompleted values,
+            (or any other open lists of autocompleted values:*/
+            closeAllLists(null);
+        });
+        return b
+    }
+
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
         let x: any = document.getElementById(this.id + "autocomplete-list");
