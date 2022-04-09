@@ -123,7 +123,7 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
             inp.value = this.getElementsByTagName("input")[0].value;
             /*close the list of autocompleted values,
             (or any other open lists of autocompleted values:*/
-            closeAllLists(null);
+            closeAllLists(null, inp);
         });
         return b
     }
