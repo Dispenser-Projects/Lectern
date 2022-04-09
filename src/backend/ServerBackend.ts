@@ -64,8 +64,7 @@ export class ServerBackend implements Backend {
         if(this.modelArray != null)
             return new Promise(() => this.modelArray)
 
-        return (fetch(properties.backend_url_all_models + "?size=9999", { mode: 'cors' }).then(response => {
-            console.log(response.status)
+        return (fetch(properties.backend_url_all_models + "?size=9999").then(response => {
             if (response.ok)
                 return response.json();
             else
