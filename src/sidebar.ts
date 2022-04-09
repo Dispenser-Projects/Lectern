@@ -1,4 +1,4 @@
-import {loadModel} from "./index";
+import {dispGrid, dispAxes, dispBlockFrame, loadModel} from "./index";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
@@ -13,11 +13,20 @@ document.getElementById("modelValidateButton").onclick =
 
 document.getElementById("sidebarOpenButton").onclick = clickButton
 
-document.getElementById("modelInput").onkeydown = pressEnter
+const input: HTMLInputElement = document.getElementById("modelInput") as HTMLInputElement
+
+input.onkeydown = event => pressEnter(event, input)
+//input.onblur = () => closeAllLists(null, input)
 
 let modelAutocompleteList = document.getElementById('modelAutocomplete');
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
+const dispAxesButton = document.getElementById("dispAxes") as HTMLInputElement
+dispAxesButton.onclick = () => dispAxes(dispAxesButton.checked)
+const dispGridButton = document.getElementById("dispGrid") as HTMLInputElement
+dispGridButton.onclick = () => dispGrid(dispGridButton.checked)
+const dispBlockFrameButton = document.getElementById("dispBlockFrame") as HTMLInputElement
+dispBlockFrameButton.onclick = () => dispBlockFrame(dispBlockFrameButton.checked)
 
 backend.getAllModel().then(list => autocomplete(document.getElementById("modelInput") as HTMLInputElement, list))
 
@@ -27,7 +36,6 @@ appVersionNode.innerText = appVersion
 appVersionNode.classList.remove('d-none');
 
 
-let open = false;
 let autocompleteOpen = false
 
 function clickButton() {
@@ -41,9 +49,11 @@ function closeNav() {
     sidebar.classList.remove('open')
 }
 
-function pressEnter(event: KeyboardEvent) {
-    if (event.key === "Enter" && !autocompleteOpen)
+function pressEnter(event: KeyboardEvent, input: HTMLInputElement) {
+    if (event.key === "Enter" && input === document.activeElement) {
         document.getElementById("modelValidateButton").click()
+        closeAllLists(null, input)
+    }
 }
 
 
@@ -55,7 +65,7 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
     inp.addEventListener("input", function(_) {
         let a, b, i, val = this.value;
         /*close any already open lists of autocompleted values*/
-        closeAllLists(null);
+        closeAllLists(null, inp);
         autocompleteOpen = true
         if (!val) { return false;}
         currentFocus = -1;
@@ -87,7 +97,7 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     /*close the list of autocompleted values,
                     (or any other open lists of autocompleted values:*/
-                    closeAllLists(null);
+                    closeAllLists(null, inp);
                 });
                 a.appendChild(b);
             }
@@ -134,21 +144,22 @@ function autocomplete(inp: HTMLInputElement, arr: string[]) {
             x[i].classList.remove("autocomplete-active");
         }
     }
-    function closeAllLists(element: EventTarget) {
-        /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
-        if (!element) {
-            modelAutocompleteList.classList.add("hidden")
-        }
-        let x = document.getElementsByClassName("autocomplete-items");
-        for (let i = 0; i < x.length; i++) {
-            if (element !== x[i] && element !== inp) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
-        autocompleteOpen = false
-    }
     /*execute a function when someone clicks in the document:*/
-    document.addEventListener("click", (e) => closeAllLists(e.target));
+    document.addEventListener("click", (e) => closeAllLists(e.target, inp));
+}
+
+function closeAllLists(element: EventTarget, inp: HTMLInputElement) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    if (!element) {
+        modelAutocompleteList.classList.add("hidden")
+    }
+    let x = document.getElementsByClassName("autocomplete-items");
+    for (let i = 0; i < x.length; i++) {
+        if (element !== x[i] && element !== inp) {
+            x[i].parentNode.removeChild(x[i]);
+        }
+    }
+    autocompleteOpen = false
 }
 

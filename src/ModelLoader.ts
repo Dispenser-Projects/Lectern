@@ -2,26 +2,31 @@ import * as THREE from "three";
 import {McModel} from "./models/ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
-import {MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
+import {BoxGeometry, MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
 import {axisToVector, convertPosition, rotateAboutPoint} from "./VectorUtils";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 import merge from 'deepmerge-json';
+import {properties} from "./resources/Properties";
 
 const backend: Backend = new ServerBackend();
 const sortArray = (array: Array<[string, string]>) => array.sort((a, b) => a[1] > b[1] ? -1 : 1)
+const block_size = properties.block_size
 
 /**
  * Load <i>modelName</i> model in the scene
  * @param modelName the name of the model to load
  * @param scene the scene where place the model
  */
-export function load(modelName: string, scene: THREE.Scene) {
+export function load(modelName: string, scene: THREE.Scene): Promise<THREE.Object3D> {
     const sort = (model: Model) => sortArray(Object.entries(model.textures))
     const load = (model: Model) => loadTextureImages(sort(model), new Map<string, HTMLImageElement>())
-    loadModel(modelName)
+    const group = new THREE.Group()
+    return loadModel(modelName)
         .then<[Model, Map<string, HTMLImageElement>]>(model => load(model).then(map => [model, map]))
-        .then(model => model[0].elements.forEach(element => createElement(element, model[1], scene)))
+        .then(model => model[0].elements.map(element => createElement(element, model[1], scene).object)
+            .forEach(o => group.add(o))
+        ).then(() => group)
 
 
 }
@@ -95,12 +100,12 @@ function createTexture(image: HTMLImageElement): Texture {
  * @param scene the Scene where add the Mesh
  * @return an possible error
  */
-function createElement(element: Element, map: Map<string, HTMLImageElement>, scene: THREE.Scene): {error?: string} {
+function createElement(element: Element, map: Map<string, HTMLImageElement>, scene: THREE.Scene): {error?: string, object: THREE.Mesh} {
     // Manager bounds of arrays
-    if(element.from.length != 3)
-        return {error: "Size of 'from' must be equal to 3."}
-    if(element.to.length != 3)
-        return {error: "Size of 'to' must be equal to 3."}
+    if (element.from.length != 3)
+        return {error: "Size of 'from' must be equal to 3.", object: undefined}
+    if (element.to.length != 3)
+        return {error: "Size of 'to' must be equal to 3.", object: undefined}
 
     // Compute the size of the Geometry
     const size = element.to.map((k, i) => k - element.from[i])
@@ -121,41 +126,87 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
             alphaTest: 0.5
         })
         // Apply UV mapping to the texture
-        updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, faceToIndex(key), value.rotation)
+        if(value.uv === undefined) {
+            const size = getFaceSizeFromGeometry(key, base)
+            value.uv = [0, 0, 16, 16]
+        }
+        updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, key, value.rotation)
     }
 
     const mesh = new THREE.Mesh(base, materials)
 
     // Place Mesh in the Scene
-    scene.add(mesh)
     const wantedPosition = new Vector3(element.from[0], element.from[1], element.from[2])
     const position = convertPosition(mesh.geometry.parameters.width, mesh.geometry.parameters.height, mesh.geometry.parameters.depth, wantedPosition)
     mesh.position.set(position.x, position.y, position.z)
 
     // Rotate Mesh in the Scene
-    if(element.rotation) {
+    if (element.rotation) {
         const axis = axisToVector(element.rotation.axis)
         const origin = new Vector3(element.rotation.origin[0], element.rotation.origin[1], element.rotation.origin[2])
         rotateAboutPoint(mesh, convertPosition(0, 0, 0, origin), axis.normalize(), MathUtils.degToRad(element.rotation.angle), false)
     }
+    return { object: mesh }
 }
 
 /**
  * Apply UV mapping to the texture
- * @param x1 the top left coordinate X of the texture, between 0 and 16
- * @param y1 the top left coordinate Y of the texture, between 0 and 16
- * @param x2 the bottom right coordinate X of the texture, between 0 and 16
- * @param y2 the bottom right coordinate Y of the texture, between 0 and 16
+ * @param x1 the top left coordinate X of the texture, between 0 and block_size
+ * @param y1 the top left coordinate Y of the texture, between 0 and block_size
+ * @param x2 the bottom right coordinate X of the texture, between 0 and block_size
+ * @param y2 the bottom right coordinate Y of the texture, between 0 and block_size
  * @param geometry the geometry where apply UV mapping
  * @param face the face number to consider for the mapping
  * @param angle the rotation angle to apply to the texture
  */
-function updateTextureCoords(x1: number, y1: number, x2: number, y2: number, geometry: THREE.BoxGeometry, face: number, angle: number) {
-    const faceUvArray = rotateUv(angle, [x1 / 16, (16 - y1) / 16], [x2 / 16, (16 - y1) / 16], [x1 / 16, (16 - y2) / 16], [x2 / 16, (16 - y2) / 16])
+function updateTextureCoords(x1: number, y1: number, x2: number, y2: number, geometry: THREE.BoxGeometry, face: string, angle: number) {
+    const faceSize = getFaceSizeFromGeometry(face, geometry)
+    const faceNumber = faceToIndex(face)
+
+    let faceUvArray
+    // if(faceNumber === 2)
+    //     faceUvArray = rotateUv(angle, [(x1 + 1) / faceSize.length, (faceSize.width - y1 - 1) / faceSize.length], [(x2 - 1) / block_size, (faceSize.width - y1 - 1) / faceSize.length], [(x1 + 1) / block_size, (block_size - y2 + 1) / faceSize.length], [(x2 - 1) / block_size, (block_size - y2 + 1) / faceSize.length])
+    // else
+    //     faceUvArray = rotateUv(angle, [(x1 + 1) / faceSize.length, (faceSize.width - y1 - 1) / faceSize.length], [(x2 - 1) / block_size, (faceSize.width - y1 - 1) / faceSize.length], [(x1 + 1) / block_size, (block_size - y2) / faceSize.length], [(x2 - 1) / block_size, (block_size - y2) / faceSize.length])
+
+    const diff = {length: block_size - faceSize.length, width: block_size - faceSize.width}
+
+    if(faceNumber === 2) {
+        console.log(geometry.parameters)
+        console.log(faceSize)
+        console.log([x1, y1, x2, y2])
+    }
+
+    // const xDiff = (block_size - faceSize.length) / 2
+    // const yDiff = (block_size - faceSize.width) / 2
+    // x1 = x1 + xDiff
+    // y1 = y1 + block_size - faceSize.width
+    // x2 = x2 - x1
+    // y2 = y2 - (y2 - block_size - y1 + faceSize.width)
+
+    if(faceNumber === 2) {
+        console.log([x1, y1, x2, y2])
+    }
+
+    faceUvArray = rotateUv(angle,
+        [x1 / block_size, (block_size - y1) / block_size],
+        [x2 / block_size, (block_size - y1) / block_size],
+        [x1 / block_size, (block_size - y2) / block_size],
+        [x2 / block_size, (block_size - y2) / block_size]
+    )
+
+    y1 = y1 + faceSize.length
+
+    // faceUvArray = rotateUv(angle,
+    //     [(x1 + diff.length / 2) / block_size, (faceSize.width - y1) / faceSize.width],
+    //     [(x2 - diff.length / 2) / block_size, (faceSize.width - y1) / faceSize.width],
+    //     [(x1 + diff.length / 2) / block_size, (block_size - y2 + diff.length / 2) / faceSize.width],
+    //     [(x2 - diff.length / 2) / block_size, (block_size - y2 + diff.length / 2) / faceSize.width]
+    // )
 
     const array = Float32Array.from(geometry.getAttribute("uv").array)
-    for(let i = 0; i < 8; i++)
-        array[face * 8 + i] = faceUvArray[i]
+    for (let i = 0; i < 8; i++)
+        array[faceNumber * 8 + i] = faceUvArray[i]
 
     geometry.setAttribute("uv", new THREE.BufferAttribute(array, 2));
     geometry.attributes.uv.needsUpdate = true;
@@ -168,13 +219,39 @@ function updateTextureCoords(x1: number, y1: number, x2: number, y2: number, geo
  */
 function faceToIndex(face: string): number {
     switch (face) {
-        case McModel.FaceEnum.EAST : return 0
-        case McModel.FaceEnum.WEST : return 1
-        case McModel.FaceEnum.UP   : return 2
-        case McModel.FaceEnum.DOWN : return 3
-        case McModel.FaceEnum.SOUTH: return 4
-        case McModel.FaceEnum.NORTH: return 5
+        case McModel.FaceEnum.EAST :
+            return 0
+        case McModel.FaceEnum.WEST :
+            return 1
+        case McModel.FaceEnum.UP   :
+            return 2
+        case McModel.FaceEnum.DOWN :
+            return 3
+        case McModel.FaceEnum.SOUTH:
+            return 4
+        case McModel.FaceEnum.NORTH:
+            return 5
     }
+}
+
+function getFaceSizeFromGeometry(face: string, geometry: THREE.BoxGeometry): { length: number, width: number } {
+    switch (face) {
+        case McModel.FaceEnum.EAST :
+            return {length: geometry.parameters.depth, width: geometry.parameters.height}
+        case McModel.FaceEnum.WEST :
+            return {length: geometry.parameters.depth, width: geometry.parameters.height}
+        case McModel.FaceEnum.UP   :
+            return {length: geometry.parameters.depth, width: geometry.parameters.width}
+        case McModel.FaceEnum.DOWN :
+            return {length: geometry.parameters.depth, width: geometry.parameters.width}
+        case McModel.FaceEnum.SOUTH:
+            return {length: geometry.parameters.width, width: geometry.parameters.height}
+        case McModel.FaceEnum.NORTH:
+            return {length: geometry.parameters.width, width: geometry.parameters.height}
+    }
+
+
+    return {length: 0, width: 0}
 }
 
 /**

@@ -18,7 +18,8 @@ export class ServerBackend implements Backend {
      * @throws an error if the model is invalid
      */
     getModel(modelName: string): Promise<Model> {
-        return fetch(properties.backend_url_model + modelName).then(response => {
+        return fetch(properties.backend_url_model + modelName, { mode: 'cors' }).then(response => {
+            console.log(response.status)
             if (response.ok)
                 return response.json();
             else
@@ -48,8 +49,6 @@ export class ServerBackend implements Backend {
     private setDefaultValue(model: Model): Model {
         if(model.elements !== undefined)
             for(const value of model.elements.flatMap(element => Object.values(element.faces))) {
-                if(value.uv === undefined)
-                    value.uv = [0, 0, 16, 16]
                 if(value.rotation === undefined)
                     value.rotation = 0
             }
@@ -65,7 +64,8 @@ export class ServerBackend implements Backend {
         if(this.modelArray != null)
             return new Promise(() => this.modelArray)
 
-        return (fetch(properties.backend_url_all_models + "?limit=9999").then(response => {
+        return (fetch(properties.backend_url_all_models + "?size=9999", { mode: 'cors' }).then(response => {
+            console.log(response.status)
             if (response.ok)
                 return response.json();
             else
