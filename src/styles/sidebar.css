@@ -8,6 +8,10 @@
     @apply translate-x-0 transition-transform;
 }
 
+.autocomplete-list {
+    @apply bg-paper-400 m-0 absolute max-h-screen overflow-y-auto inset-x-0 divide-y divide-white/10;
+}
+
 .autocomplete-list li{
     @apply px-4 py-2 cursor-pointer w-full truncate;
 }

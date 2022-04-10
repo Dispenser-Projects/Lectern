@@ -93,6 +93,11 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         closeAutocompleteList()
     }
 
+    function calculateHeightAutocompleteList(){
+        console.log(sidebar.clientHeight - autocompleteList.getBoundingClientRect().top + "px")
+        autocompleteList.style.maxHeight = `calc(${sidebar.clientHeight - autocompleteList.getBoundingClientRect().top}px - 1.75rem)`
+    }
+
     function toHtmlElement(str: string, searchedValue: string): HTMLLIElement {
         let b = document.createElement("li");
         b.setAttribute('role', 'option')
@@ -127,14 +132,16 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
         autocompleteList.classList.remove("hidden")
         autocompleteList.innerHTML = ''
-
+        
         /*for each item in the array...*/
         arr.filter(e => e.includes(inputValue.toLowerCase()))
-            .map(s => [levenshteinDistance(inputValue, s), s] as [number, string])
-            .sort((s1, s2) => s1[0] - s2[0])
-            .map(s => toHtmlElement(s[1], inputValue))
-            .forEach(v => autocompleteList.append(v))
-
+        .map(s => [levenshteinDistance(inputValue, s), s] as [number, string])
+        .sort((s1, s2) => s1[0] - s2[0])
+        .map(s => toHtmlElement(s[1], inputValue))
+        .forEach(v => autocompleteList.append(v))
+        
+        calculateHeightAutocompleteList()
+        autocompleteList.scrollTo({top: 0});
     }
 
     textInput.onkeyup = function(event: KeyboardEvent) {
