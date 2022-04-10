@@ -24,3 +24,15 @@ input[type="search"]::-webkit-search-cancel-button {
     margin-left: .4em;
     cursor: pointer;
 }
+
+.autocomplete-list li{
+    @apply px-4 py-2 cursor-pointer w-full truncate outline-none;
+}
+
+.autocomplete-list li:hover{
+    @apply bg-white/10;
+}
+
+.autocomplete-list li:focus{
+    @apply bg-white/10;
+}

@@ -24,8 +24,8 @@
         <div id="sidebarPanel" class="space-y-7 flex-grow">
             <section class="space-y-4 ">
                 <div class="relative">
-                    <input id="modelInput" type="search" placeholder="Model name" autocomplete="off" class="bg-paper-400 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-text/20 focus:ring-text/50 outline-none">
-                    <ul id="modelAutocomplete" class="autocomplete-list hidden bg-paper-400 m-0 absolute max-h-screen overflow-y-auto inset-x-0 divide-y divide-white/10"></ul>
+                    <input id="modelInput" type="search" placeholder="Model name" autocomplete="off" data-autocomplete="#modelAutocomplete" data-validate="#modelValidateButton" class="bg-paper-400 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-text/20 focus:ring-text/50 outline-none">
+                    <ul id="modelAutocomplete" role="listbox" aria-label="Models" tabindex="-1"  class="autocomplete-list hidden bg-paper-400 m-0 absolute max-h-screen overflow-y-auto inset-x-0 divide-y divide-white/10"></ul>
                 </div>
                 <button id="modelValidateButton" class="w-full bg-paper-400 text-center px-4 py-3 uppercase hover:bg-paper-300 active:bg-paper-200 transition-colors font-bold">Validate</button>
             </section>
