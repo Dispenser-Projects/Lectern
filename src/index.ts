@@ -18,11 +18,15 @@ loadModel(properties.default_model)
  * @param model
  */
 export function loadModel(model: string): void {
+    let modelButton = document.getElementById("modelValidateButton")
+    modelButton.innerText = modelButton.dataset.loadinglabel
     scene.remove(object)
     cleanupObject3D(object)
     load(model, scene)
         .then(o => object = o)
         .then(o => scene.add(o))
+        .then(() => modelButton.innerText = modelButton.dataset.submitlabel)
+        .catch(() => modelButton.innerText = modelButton.dataset.notfoundlabel)
 }
 
 /**

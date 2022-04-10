@@ -7,12 +7,12 @@ import "./styles/sidebar.css"
 const backend: Backend = new ServerBackend();
 
 let sidebar = document.getElementById("sidebar")
-/* Events */
-document.getElementById("modelValidateButton").onclick =
-    () => loadModel((<HTMLInputElement>document.getElementById("modelInput")).value)
+let modelButton = document.getElementById("modelValidateButton")
+let modelInput = document.getElementById("modelInput") as HTMLInputElement
 
+modelButton.onclick = () => loadModel(modelInput.value)
 document.getElementById("sidebarOpenButton").onclick = clickButton
-
+backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
 const dispAxesButton = document.getElementById("dispAxes") as HTMLInputElement
@@ -22,8 +22,7 @@ dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
 const dispBlockFrameButton = document.getElementById("dispBlockFrame") as HTMLInputElement
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
 
-let modelInput = document.getElementById("modelInput")
-backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
+
 
 let appVersion = require('./../package.json').version;
 let appVersionNode = document.getElementById('appVersion');
@@ -124,7 +123,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     /*execute a function when someone writes in the text field:*/
-    textInput.oninput = textInput.onfocus = function() {
+    textInput.oninput = function() {
         let inputValue = textInput.value;
         /*close any already open lists of autocompleted inputValueues*/
         autocompleteOpen = true
@@ -145,10 +144,19 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     textInput.onkeyup = function(event: KeyboardEvent) {
-        if (event.key == "ArrowDown"){
-            const firstItem =  autocompleteList.firstElementChild
-            if ( !(firstItem instanceof HTMLElement)) {return;}
-            firstItem.focus()
+        switch (event.key){
+            case "ArrowDown":
+                const firstItem =  autocompleteList.firstElementChild
+                if ( !(firstItem instanceof HTMLElement)) {return;}
+                firstItem.focus()
+                break
+            case "Escape":
+                textInput.blur()
+                break
+            case "Enter":
+                validateButton.click()
+                textInput.blur()
+                break
         }
     }
 
@@ -179,6 +187,9 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 }
                 event.preventDefault()
                 break;
+            case "Escape":
+                textInput.focus();
+                break
         }
     }
 
