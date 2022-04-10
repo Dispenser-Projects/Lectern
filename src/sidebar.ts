@@ -124,7 +124,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     /*execute a function when someone writes in the text field:*/
-    textInput.oninput = textInput.onfocus = function() {
+    textInput.oninput = function() {
         let inputValue = textInput.value;
         /*close any already open lists of autocompleted inputValueues*/
         autocompleteOpen = true
@@ -145,10 +145,19 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     textInput.onkeyup = function(event: KeyboardEvent) {
-        if (event.key == "ArrowDown"){
-            const firstItem =  autocompleteList.firstElementChild
-            if ( !(firstItem instanceof HTMLElement)) {return;}
-            firstItem.focus()
+        switch (event.key){
+            case "ArrowDown":
+                const firstItem =  autocompleteList.firstElementChild
+                if ( !(firstItem instanceof HTMLElement)) {return;}
+                firstItem.focus()
+                break
+            case "Escape":
+                textInput.blur()
+                break
+            case "Enter":
+                validateButton.click()
+                textInput.blur()
+                break
         }
     }
 
@@ -179,6 +188,9 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 }
                 event.preventDefault()
                 break;
+            case "Escape":
+                textInput.focus();
+                break
         }
     }
 
