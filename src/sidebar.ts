@@ -7,12 +7,12 @@ import "./styles/sidebar.css"
 const backend: Backend = new ServerBackend();
 
 let sidebar = document.getElementById("sidebar")
-/* Events */
-document.getElementById("modelValidateButton").onclick =
-    () => loadModel((<HTMLInputElement>document.getElementById("modelInput")).value)
+let modelButton = document.getElementById("modelValidateButton")
+let modelInput = document.getElementById("modelInput") as HTMLInputElement
 
+modelButton.onclick = () => loadModel(modelInput.value)
 document.getElementById("sidebarOpenButton").onclick = clickButton
-
+backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
 const dispAxesButton = document.getElementById("dispAxes") as HTMLInputElement
@@ -22,8 +22,7 @@ dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
 const dispBlockFrameButton = document.getElementById("dispBlockFrame") as HTMLInputElement
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
 
-let modelInput = document.getElementById("modelInput")
-backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
+
 
 let appVersion = require('./../package.json').version;
 let appVersionNode = document.getElementById('appVersion');
