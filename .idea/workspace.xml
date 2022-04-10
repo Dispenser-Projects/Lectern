@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Add more backend URL properties and add autocompletion list for model">
+    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Resolving small compilation error following merge">
+      <change afterPath="$PROJECT_DIR$/src/models/McMetaInterface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/ServerBackend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/ServerBackend.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sidebar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sidebar.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/Properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +24,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -42,7 +50,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="ts.external.directory.path" value="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="F:\Workbench\BlockRenderer\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -124,7 +132,15 @@
       <workItem from="1641590929719" duration="9958000" />
       <workItem from="1641636276328" duration="13300000" />
       <workItem from="1641726866403" duration="8872000" />
-      <workItem from="1642980838140" duration="19000" />
+      <workItem from="1642980838140" duration="484000" />
+      <workItem from="1643063224500" duration="2044000" />
+      <workItem from="1643106300959" duration="1193000" />
+      <workItem from="1646596460089" duration="11031000" />
+      <workItem from="1646764528082" duration="1367000" />
+      <workItem from="1648847078712" duration="1706000" />
+      <workItem from="1649505849546" duration="24859000" />
+      <workItem from="1649589397174" duration="6355000" />
+      <workItem from="1649607365786" duration="3032000" />
     </task>
     <task id="LOCAL-00001" summary="Add more backend URL properties and add autocompletion list for model">
       <created>1642949728272</created>
@@ -133,7 +149,28 @@
       <option name="project" value="LOCAL" />
       <updated>1642949728272</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Resolve path problem when deployed">
+      <created>1642980919873</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1642980919873</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add some helpers to the sidebar">
+      <created>1649545644299</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1649545644299</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Resolving small compilation error following merge">
+      <created>1649547671567</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1649547671567</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,11 +186,34 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add more backend URL properties and add autocompletion list for model" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add more backend URL properties and add autocompletion list for model" />
+    <MESSAGE value="Resolve path problem when deployed" />
+    <MESSAGE value="Add some helpers to the sidebar" />
+    <MESSAGE value="Resolving small compilation error following merge" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resolving small compilation error following merge" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/ModelLoader.ts</url>
+          <line>206</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/node_modules/@types/node/timers.d.ts</url>
+          <line>11</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

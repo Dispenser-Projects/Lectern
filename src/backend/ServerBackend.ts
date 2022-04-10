@@ -3,6 +3,8 @@ import {McModel} from "../models/ModelInterface";
 import {Page} from "../models/ModelListInterface"
 import Model = McModel.Model;
 import {properties} from "../resources/Properties";
+import {McMetaModule} from "../models/McMetaInterface";
+import McMeta = McMetaModule.McMeta;
 
 /**
  * Class for get resources from API REST Server
@@ -75,5 +77,19 @@ export class ServerBackend implements Backend {
         }) as Promise<Page>)
             .then(page => page.elements.map(element => element.id))
             .then(array => this.modelArray = array.sort())
+    }
+
+    /**
+     * Request the <i>textureName</i> mcmeta file to the backend
+     * @param textureName the name of the texture to request the mcmeta file
+     * @return a promise for the mcmeta file or undefined if the texture hasn't ab associated mcmeta file
+     */
+    getMcMetaFromTexture(textureName: string): Promise<McMeta | undefined> {
+        return fetch(properties.backend_url_mcmeta + textureName)
+            .then(response => {
+                if(response.ok)
+                    return response.json()
+                return undefined
+            }) as Promise<McMeta>
     }
 }
