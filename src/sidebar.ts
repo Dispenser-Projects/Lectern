@@ -78,8 +78,11 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
     /*Get the validate button specified in the `data-validate` attribute*/
     let validateButton: HTMLElement = document.querySelector(textInput.dataset.validate)
+    let selectedItem: HTMLElement = null
+    const styleSelectedItem = "selected"
 
     function selectAutocomplete(target: HTMLElement){
+        if ( !(target) ){return;}
         textInput.value = target.dataset.name
         closeAutocompleteList()
         validateButton.click()
@@ -90,6 +93,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         const relatedTarget = event.relatedTarget;
         if (relatedTarget && relatedTarget instanceof HTMLElement && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
         closeAutocompleteList()
+        selectedItem = null
     }
 
     function calculateHeightAutocompleteList(){
@@ -100,7 +104,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     function toHtmlElement(str: string, searchedValue: string): HTMLLIElement {
         let b = document.createElement("li");
         b.setAttribute('role', 'option')
-        b.setAttribute('tabindex', '0')
+        // b.setAttribute('tabindex', '0')
         /*make the matching letters bold:*/
         const index = str.toLowerCase().indexOf(searchedValue.toLowerCase())
         b.innerHTML = str.substr(0, index)
@@ -127,10 +131,11 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         let inputValue = textInput.value;
         /*close any already open lists of autocompleted inputValueues*/
         autocompleteOpen = true
-        if (!inputValue) { return false;}
+        if (!inputValue) { closeAutocompleteList(); return false;}
 
         autocompleteList.classList.remove("hidden")
         autocompleteList.innerHTML = ''
+        selectedItem = null
         
         /*for each item in the array...*/
         arr.filter(e => e.includes(inputValue.toLowerCase()))
@@ -143,19 +148,47 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         autocompleteList.scrollTo({top: 0});
     }
 
+    function selectItem(target: any){
+        if ( !(target instanceof HTMLElement) ){
+            return
+        }
+        selectedItem?.classList.remove(styleSelectedItem)
+        selectedItem = target
+        selectedItem.classList.add(styleSelectedItem)
+
+        textInput.value = selectedItem.dataset.name
+        textInput.focus()
+        textInput.selectionStart = 0
+        textInput.selectionEnd = textInput.value.length;
+    }
+
     textInput.onkeyup = function(event: KeyboardEvent) {
         switch (event.key){
             case "ArrowDown":
-                const firstItem =  autocompleteList.firstElementChild
-                if ( !(firstItem instanceof HTMLElement)) {return;}
-                firstItem.focus()
+            case "ArrowUp":
+                switch (event.key){
+                    case "ArrowDown":
+                        if (selectedItem && document.body.contains(selectedItem)){
+                            selectItem(selectedItem.nextElementSibling)
+                            break
+                        }
+                        selectItem(autocompleteList.firstElementChild)
+                        break
+                    case "ArrowUp":
+                        if (selectedItem){
+                            selectItem(selectedItem.previousElementSibling)
+                        }
+                        break
+                }
+                event.preventDefault()
+
                 break
-            case "Escape":
-                textInput.blur()
-                break
+                
             case "Enter":
+                selectAutocomplete(selectedItem)
                 validateButton.click()
                 textInput.blur()
+                event.preventDefault()
                 break
         }
     }
@@ -167,30 +200,5 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     /*When the focus is lost*/
     textInput.onblur = autocompleteList.onblur = closeOnBlur
 
-    autocompleteList.onkeyup = function(event: KeyboardEvent) {
-        const target: EventTarget = event.target;
-        if ( !(target instanceof HTMLElement) ) {return;}
-    
-        switch (event.key) {
-            case "ArrowDown":
-                if (target.nextElementSibling instanceof HTMLElement){
-                    target.nextElementSibling.focus()
-                }
-                event.preventDefault()
-                break;
-            case "ArrowUp":
-                if (target.previousElementSibling instanceof HTMLElement){
-                    target.previousElementSibling.focus()
-                }
-                else{
-                    textInput.focus()
-                }
-                event.preventDefault()
-                break;
-            case "Escape":
-                textInput.focus();
-                break
-        }
-    }
 
 }

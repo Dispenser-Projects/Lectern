@@ -37,6 +37,6 @@ input[type="search"]::-webkit-search-cancel-button {
     @apply bg-white/10;
 }
 
-.autocomplete-list li:focus{
+.autocomplete-list li:focus, .autocomplete-list li.selected{
     @apply bg-white/10;
 }
