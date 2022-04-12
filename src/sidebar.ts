@@ -3,26 +3,43 @@ import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
 import "./styles/sidebar.css"
+import { properties } from "./resources/Properties";
+
+interface ValidateButton extends HTMLButtonElement{
+    changeState: (target: 'validate'|'loading'|'error') => void;
+}
 
 const backend: Backend = new ServerBackend();
 
 let sidebar = document.getElementById("sidebar")
-let modelButton = document.getElementById("modelValidateButton")
-let modelInput = document.getElementById("modelInput") as HTMLInputElement
+let modelButton = <ValidateButton>document.getElementById("modelValidateButton")
+let modelInput = <HTMLInputElement>document.getElementById("modelInput")
 
-modelButton.onclick = () => loadModel(modelInput.value)
-document.getElementById("sidebarOpenButton").onclick = clickButton
-backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
+window.onload = function(){
+    sidebar.style.display = null
+    sidebar.classList.add('open')
+}
+
+modelButton.onclick = () => {
+    modelButton.changeState('loading')
+    modelButton.disabled = true;
+    loadModel(modelInput.value)
+        .then(() => modelButton.changeState('validate'))
+        .catch(() => modelButton.changeState('error'))
+        .finally(() => modelButton.disabled = false)
+}
+document.getElementById("sidebarOpenButton").onclick = clickNavButton
+backend.getAllModel().then(list => autocomplete(modelInput, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
-const dispAxesButton = document.getElementById("dispAxes") as HTMLInputElement
+const dispAxesButton = <HTMLInputElement>document.getElementById("dispAxes")
 dispAxesButton.onchange = () => dispAxes(dispAxesButton.checked)
-const dispGridButton = document.getElementById("dispGrid") as HTMLInputElement
+const dispGridButton = <HTMLInputElement>document.getElementById("dispGrid")
 dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
-const dispBlockFrameButton = document.getElementById("dispBlockFrame") as HTMLInputElement
+const dispBlockFrameButton = <HTMLInputElement>document.getElementById("dispBlockFrame")
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
 
-
+modelInput.value = properties.default_model
 
 let appVersion = require('./../package.json').version;
 let appVersionNode = document.getElementById('appVersion');
@@ -30,9 +47,7 @@ appVersionNode.innerText = appVersion
 appVersionNode.classList.remove('d-none');
 
 
-let autocompleteOpen = false
-
-function clickButton() {
+function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
         sidebar.classList.add('open')
     } else
@@ -90,13 +105,12 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
     /*Close the autocomplete list if the focus is lost*/
     function closeOnBlur(event: FocusEvent){
-        const relatedTarget = event.relatedTarget;
-        if (relatedTarget && relatedTarget instanceof HTMLElement && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
+        const relatedTarget = <HTMLElement>event.relatedTarget;
+        if (relatedTarget && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
         closeAutocompleteList()
     }
 
     function calculateHeightAutocompleteList(){
-        console.log(sidebar.clientHeight - autocompleteList.getBoundingClientRect().top + "px")
         autocompleteList.style.maxHeight = `calc(${sidebar.clientHeight - autocompleteList.getBoundingClientRect().top}px - 1.75rem)`
     }
 
@@ -128,8 +142,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     /*execute a function when someone writes in the text field:*/
     textInput.oninput = function() {
         let inputValue = textInput.value;
-        /*close any already open lists of autocompleted inputValueues*/
-        autocompleteOpen = true
         if (!inputValue) { closeAutocompleteList(); return false;}
 
         autocompleteList.classList.remove("hidden")
@@ -181,7 +193,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 }
                 selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
                 event.preventDefault()
-
                 break
                 
             case "Enter":
@@ -201,5 +212,19 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     /*When the focus is lost*/
     textInput.onblur = autocompleteList.onblur = closeOnBlur
 
+
+    function changeState(state: 'validate'|'loading'|'error'){
+        const currentState = validateButton.querySelector('.current-state')
+        currentState.classList.add('hidden')
+        currentState.classList.remove('current-state')
+
+        const icon = validateButton.querySelector(`[data-icon=${state}]`)
+        icon.classList.remove('hidden')
+        icon.classList.add('current-state')
+    }    
+
+    Object.defineProperty(validateButton, 'changeState', {
+        value: changeState
+    })
 
 }

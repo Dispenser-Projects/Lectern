@@ -11,7 +11,7 @@
 <div id="wrapper" class="child">
 
 </div>
-<div id="sidebar" class="sidebar open bg-paper text-white fixed top-0 right-0 bottom-0">
+<div id="sidebar" style="display: none;" class="sidebar bg-paper text-white fixed top-0 right-0 bottom-0">
     <div class="sidebar-button-open-container h-0 w-min -translate-x-full">
         <button id="sidebarOpenButton" class="bg-paper py-3 px-4 text-xl rounded-l-full hover:bg-gray-700">☰</button>
     </div>
@@ -22,12 +22,16 @@
         </header>
     
         <div id="sidebarPanel" class="space-y-7 flex-grow">
-            <section class="space-y-4 ">
-                <div class="relative">
-                    <input id="modelInput" type="search" placeholder="Model name" autocomplete="off" data-autocomplete="#modelAutocomplete" data-validate="#modelValidateButton" class="bg-paper-400 w-full px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-text/20 focus:ring-text/50 outline-none">
+            <section class="space-x-2 flex">
+                <div class="relative flex-grow">
+                    <input id="modelInput" type="search" placeholder="Model name" autocomplete="off" data-autocomplete="#modelAutocomplete" data-validate="#modelValidateButton" class="w-full bg-paper-400 px-4 py-3 border-0 focus:border-0 ring-0 hover:ring-2 focus:ring-2 ring-text/20 focus:ring-text/50 outline-none">
                     <ul id="modelAutocomplete" role="listbox" aria-label="Models" tabindex="-1" class="autocomplete-list hidden"></ul>
                 </div>
-                <button id="modelValidateButton" data-submitlabel="Validate" data-loadinglabel="Loading..." data-notfoundlabel="Not Found" class="w-full bg-paper-400 text-center px-4 py-3 uppercase hover:bg-paper-300 active:bg-paper-200 transition-colors font-bold">Validate</button>
+                <button id="modelValidateButton" data-submitlabel="Validate" data-loadinglabel="Loading..." data-notfoundlabel="Not Found" class="bg-paper-400 text-center px-4 py-3 uppercase hover:bg-paper-300 active:bg-paper-200 transition-colors font-bold focus:border-0 ring-0 focus:ring-2 ring-text/50 outline-none">
+                    <svg data-icon="validate" class="current-state w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <svg data-icon="loading" class="hidden animate-spin w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.637 15.309A8.88 8.88 0 0 1 3 12c0-4.937 4.063-9 9-9"/></svg>
+                    <svg data-icon="error" class="hidden w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
             </section>
             <section id="sidebarPanel_displayOptions" class="space-y-4">
                 <h2 class="text-lg text-center uppercase px-4 py-3">Display Options</h2>

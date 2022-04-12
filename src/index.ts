@@ -17,16 +17,12 @@ loadModel(properties.default_model)
  * Load the model <i>model</i> in the scene
  * @param model
  */
-export function loadModel(model: string): void {
-    let modelButton = document.getElementById("modelValidateButton")
-    modelButton.innerText = modelButton.dataset.loadinglabel
+export async function loadModel(model: string): Promise<THREE.Object3D<THREE.Event>> {
     scene.remove(object)
     cleanupObject3D(object)
-    load(model, scene)
+    return load(model, scene)
         .then(o => object = o)
         .then(o => scene.add(o))
-        .then(() => modelButton.innerText = modelButton.dataset.submitlabel)
-        .catch(() => modelButton.innerText = modelButton.dataset.notfoundlabel)
 }
 
 /**
