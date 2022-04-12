@@ -1,9 +1,16 @@
+import resolveConfig from 'tailwindcss/resolveConfig'
+//@ts-ignore
+import tailwindConfig from '/tailwind.config.js'
+
+const themeConfig = resolveConfig(tailwindConfig)
+
 export const properties = {
     backend_url_texture: "https://dispenser.gunivers.net/api/1.18.1/block/texture/",
     backend_url_model: "https://dispenser.gunivers.net/api/1.18.1/block/model/",
     backend_url_mcmeta: "https://dispenser.gunivers.net/api/1.18.1/block/mcmeta/",
     backend_url_all_models: "https://dispenser.gunivers.net/api/1.18.1/block/models/",
     default_model: "slime_block",
-    background_color: "hsl(198, 20%, 87%)",
+    //@ts-ignore
+    background_color: themeConfig.theme.colors.background['500'],
     block_size: 16
 }
