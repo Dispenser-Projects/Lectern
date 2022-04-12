@@ -5,42 +5,38 @@ import {ServerBackend} from "./backend/ServerBackend";
 import "./styles/sidebar.css"
 import { properties } from "./resources/Properties";
 
+interface ValidateButton extends HTMLButtonElement{
+    changeState: (target: 'validate'|'loading'|'error') => void;
+}
+
 const backend: Backend = new ServerBackend();
 
 let sidebar = document.getElementById("sidebar")
-let modelButton = document.getElementById("modelValidateButton")
-let modelInput = document.getElementById("modelInput") as HTMLInputElement
+let modelButton = <ValidateButton>document.getElementById("modelValidateButton")
+let modelInput = <HTMLInputElement>document.getElementById("modelInput")
 
 window.onload = function(){
     sidebar.style.display = null
     sidebar.classList.add('open')
 }
 
-function changeState(target: HTMLElement, state: 'validate'|'loading'|'error'){
-    const currentState = target.querySelector('.current-state')
-    currentState.classList.add('hidden')
-    currentState.classList.remove('current-state')
-
-    const icon = target.querySelector(`[data-icon=${state}]`)
-    icon.classList.remove('hidden')
-    icon.classList.add('current-state')
-}    
-
 modelButton.onclick = () => {
-    changeState(modelButton, 'loading')
+    modelButton.changeState('loading')
+    modelButton.disabled = true;
     loadModel(modelInput.value)
-        .then(() => changeState(modelButton, 'validate'))
-        .catch(() => changeState(modelButton, 'error'))
+        .then(() => modelButton.changeState('validate'))
+        .catch(() => modelButton.changeState('error'))
+        .finally(() => modelButton.disabled = false)
 }
 document.getElementById("sidebarOpenButton").onclick = clickNavButton
-backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
+backend.getAllModel().then(list => autocomplete(modelInput, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
-const dispAxesButton = document.getElementById("dispAxes") as HTMLInputElement
+const dispAxesButton = <HTMLInputElement>document.getElementById("dispAxes")
 dispAxesButton.onchange = () => dispAxes(dispAxesButton.checked)
-const dispGridButton = document.getElementById("dispGrid") as HTMLInputElement
+const dispGridButton = <HTMLInputElement>document.getElementById("dispGrid")
 dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
-const dispBlockFrameButton = document.getElementById("dispBlockFrame") as HTMLInputElement
+const dispBlockFrameButton = <HTMLInputElement>document.getElementById("dispBlockFrame")
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
 
 modelInput.value = properties.default_model
@@ -106,8 +102,8 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
     /*Close the autocomplete list if the focus is lost*/
     function closeOnBlur(event: FocusEvent){
-        const relatedTarget = event.relatedTarget;
-        if (relatedTarget && relatedTarget instanceof HTMLElement && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
+        const relatedTarget = <HTMLElement>event.relatedTarget;
+        if (relatedTarget && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
         closeAutocompleteList()
     }
 
@@ -162,8 +158,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     textInput.onkeyup = function(event: KeyboardEvent) {
         switch (event.key){
             case "ArrowDown":
-                const firstItem =  autocompleteList.firstElementChild
-                if ( !(firstItem instanceof HTMLElement)) {return;}
+                const firstItem =  <HTMLElement>autocompleteList.firstElementChild
                 firstItem.focus()
                 break
             case "Escape":
@@ -184,9 +179,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     textInput.onblur = autocompleteList.onblur = closeOnBlur
 
     autocompleteList.onkeyup = function(event: KeyboardEvent) {
-        const target: EventTarget = event.target;
-        if ( !(target instanceof HTMLElement) ) {return;}
-    
+        const target = <HTMLElement>event.target;    
         switch (event.key) {
             case "ArrowDown":
                 if (target.nextElementSibling instanceof HTMLElement){
@@ -209,18 +202,18 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         }
     }
 
-    // function changeState(state: 'validate'|'loading'|'error'){
-    //     const currentState = validateButton.querySelector('.current-state')
-    //     currentState.classList.add('hidden')
-    //     currentState.classList.remove('current-state')
+    function changeState(state: 'validate'|'loading'|'error'){
+        const currentState = validateButton.querySelector('.current-state')
+        currentState.classList.add('hidden')
+        currentState.classList.remove('current-state')
 
-    //     const icon = validateButton.querySelector(`[data-icon=${state}]`)
-    //     icon.classList.remove('hidden')
-    //     icon.classList.add('current-state')
-    // }    
+        const icon = validateButton.querySelector(`[data-icon=${state}]`)
+        icon.classList.remove('hidden')
+        icon.classList.add('current-state')
+    }    
 
-    // Object.defineProperty(validateButton, 'changeState', {
-    //     value: changeState
-    // })
+    Object.defineProperty(validateButton, 'changeState', {
+        value: changeState
+    })
 
 }
