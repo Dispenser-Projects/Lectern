@@ -193,4 +193,18 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         }
     }
 
+    function changeState(state: 'validate'|'loading'|'error'){
+        const currentState = validateButton.querySelector('.current-state')
+        currentState.classList.add('hidden')
+        currentState.classList.remove('current-state')
+
+        const icon = validateButton.querySelector(`[data-icon=${state}]`)
+        icon.classList.remove('hidden')
+        icon.classList.add('current-state')
+    }    
+
+    Object.defineProperty(validateButton, 'changeState', {
+        value: changeState
+    })
+
 }
