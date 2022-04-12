@@ -3,6 +3,7 @@ import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
 import "./styles/sidebar.css"
+import { properties } from "./resources/Properties";
 
 const backend: Backend = new ServerBackend();
 
@@ -10,8 +11,28 @@ let sidebar = document.getElementById("sidebar")
 let modelButton = document.getElementById("modelValidateButton")
 let modelInput = document.getElementById("modelInput") as HTMLInputElement
 
-modelButton.onclick = () => loadModel(modelInput.value)
-document.getElementById("sidebarOpenButton").onclick = clickButton
+window.onload = function(){
+    sidebar.style.display = null
+    sidebar.classList.add('open')
+}
+
+function changeState(target: HTMLElement, state: 'validate'|'loading'|'error'){
+    const currentState = target.querySelector('.current-state')
+    currentState.classList.add('hidden')
+    currentState.classList.remove('current-state')
+
+    const icon = target.querySelector(`[data-icon=${state}]`)
+    icon.classList.remove('hidden')
+    icon.classList.add('current-state')
+}    
+
+modelButton.onclick = () => {
+    changeState(modelButton, 'loading')
+    loadModel(modelInput.value)
+        .then(() => changeState(modelButton, 'validate'))
+        .catch(() => changeState(modelButton, 'error'))
+}
+document.getElementById("sidebarOpenButton").onclick = clickNavButton
 backend.getAllModel().then(list => autocomplete(modelInput as HTMLInputElement, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
@@ -22,7 +43,7 @@ dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
 const dispBlockFrameButton = document.getElementById("dispBlockFrame") as HTMLInputElement
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
 
-
+modelInput.value = properties.default_model
 
 let appVersion = require('./../package.json').version;
 let appVersionNode = document.getElementById('appVersion');
@@ -30,9 +51,7 @@ appVersionNode.innerText = appVersion
 appVersionNode.classList.remove('d-none');
 
 
-let autocompleteOpen = false
-
-function clickButton() {
+function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
         sidebar.classList.add('open')
     } else
@@ -93,7 +112,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     function calculateHeightAutocompleteList(){
-        console.log(sidebar.clientHeight - autocompleteList.getBoundingClientRect().top + "px")
         autocompleteList.style.maxHeight = `calc(${sidebar.clientHeight - autocompleteList.getBoundingClientRect().top}px - 1.75rem)`
     }
 
@@ -125,8 +143,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     /*execute a function when someone writes in the text field:*/
     textInput.oninput = function() {
         let inputValue = textInput.value;
-        /*close any already open lists of autocompleted inputValueues*/
-        autocompleteOpen = true
         if (!inputValue) { return false;}
 
         autocompleteList.classList.remove("hidden")
@@ -193,18 +209,18 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         }
     }
 
-    function changeState(state: 'validate'|'loading'|'error'){
-        const currentState = validateButton.querySelector('.current-state')
-        currentState.classList.add('hidden')
-        currentState.classList.remove('current-state')
+    // function changeState(state: 'validate'|'loading'|'error'){
+    //     const currentState = validateButton.querySelector('.current-state')
+    //     currentState.classList.add('hidden')
+    //     currentState.classList.remove('current-state')
 
-        const icon = validateButton.querySelector(`[data-icon=${state}]`)
-        icon.classList.remove('hidden')
-        icon.classList.add('current-state')
-    }    
+    //     const icon = validateButton.querySelector(`[data-icon=${state}]`)
+    //     icon.classList.remove('hidden')
+    //     icon.classList.add('current-state')
+    // }    
 
-    Object.defineProperty(validateButton, 'changeState', {
-        value: changeState
-    })
+    // Object.defineProperty(validateButton, 'changeState', {
+    //     value: changeState
+    // })
 
 }
