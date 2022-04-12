@@ -93,7 +93,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         const relatedTarget = event.relatedTarget;
         if (relatedTarget && relatedTarget instanceof HTMLElement && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
         closeAutocompleteList()
-        selectedItem = null
     }
 
     function calculateHeightAutocompleteList(){
@@ -180,6 +179,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                         }
                         break
                 }
+                selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
                 event.preventDefault()
 
                 break
@@ -195,6 +195,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
     function closeAutocompleteList(){
         autocompleteList.classList.add("hidden")
+        selectedItem = null
     }
 
     /*When the focus is lost*/
