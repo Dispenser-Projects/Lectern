@@ -10,7 +10,7 @@ import {BoxGeometry, BoxHelper, Material} from "three";
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
 
 initialize();
-loadModel(properties.default_model)
+loadModel(properties.default_settings.model)
 
 
 /**
@@ -18,8 +18,10 @@ loadModel(properties.default_model)
  * @param model
  */
 export async function loadModel(model: string): Promise<any> {
-    scene.remove(object)
-    cleanupObject3D(object)
+    if (object){
+        scene.remove(object)
+        cleanupObject3D(object)
+    }
     return load(model, scene)
         .then(o => {
             object = o
@@ -32,7 +34,7 @@ export async function loadModel(model: string): Promise<any> {
  * Initialize the scene
  */
 function initialize() {
-
+    console.log('world')
     /* Camera */
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.x = -25;
@@ -44,17 +46,16 @@ function initialize() {
     /* Renderer */
     renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     renderer.setClearColor(properties.background_color)
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setAnimationLoop(animation);
 
     /* Light */
     const light = new THREE.AmbientLight(0xFFFFFF)
     light.position.set(40, 40, 40)
     scene.add(light);
 
-    /* Axes */
-    dispAxes(true)
-    dispGrid(true)
+    /* Display Utilities */
+    dispAxes(properties.default_settings.display_axes)
+    dispGrid(properties.default_settings.display_grid)
+    dispBlockFrame(properties.default_settings.display_block_frame)
 
     /* Controls */
     control = new OrbitControls(camera, renderer.domElement);
@@ -65,25 +66,28 @@ function initialize() {
         control.autoRotateSpeed = 0.01
     })
 
-    /* HTML */
-    const container = document.getElementById('wrapper')
-    const element = document.createElement('div')
-    container.appendChild(element)
-    element.appendChild(renderer.domElement)
-
     /* Events */
     window.addEventListener('resize', () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
     });
+
+    /* HTML */
+    const container = document.getElementById('wrapper')
+    const element = document.createElement('div')
+    container.appendChild(element)
+    element.appendChild(renderer.domElement)
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setAnimationLoop(animation);
 }
 
 export function dispAxes(enabled: boolean) {
     if(enabled) {
         axesHelper = new THREE.AxesHelper(15);
         scene.add(axesHelper);
-    } else {
+    } else if (axesHelper) {
         scene.remove(axesHelper);
         axesHelper.dispose();
     }
@@ -94,7 +98,7 @@ export function dispGrid(enabled: boolean) {
         gridHelper = new THREE.GridHelper(properties.block_size, properties.block_size);
         scene.add(gridHelper);
         gridHelper.position.y = -properties.block_size / 2
-    } else {
+    } else if (gridHelper) {
         scene.remove(gridHelper);
         axesHelper.dispose();
     }
@@ -109,7 +113,7 @@ export function dispBlockFrame(enabled: boolean) {
         });
         blockFrameHelper = new THREE.Mesh(geo, material)
         scene.add(blockFrameHelper);
-    } else {
+    } else if (blockFrameHelper) {
         scene.remove(blockFrameHelper);
         cleanupMesh(blockFrameHelper)
     }

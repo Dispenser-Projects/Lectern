@@ -33,13 +33,16 @@ backend.getAllModel().then(list => autocomplete(modelInput, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
 const dispAxesButton = <HTMLInputElement>document.getElementById("dispAxes")
+dispAxesButton.checked = properties.default_settings.display_axes
 dispAxesButton.onchange = () => dispAxes(dispAxesButton.checked)
 const dispGridButton = <HTMLInputElement>document.getElementById("dispGrid")
+dispGridButton.checked = properties.default_settings.display_grid
 dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
 const dispBlockFrameButton = <HTMLInputElement>document.getElementById("dispBlockFrame")
+dispBlockFrameButton.checked = properties.default_settings.display_block_frame
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
 
-modelInput.value = properties.default_model
+modelInput.value = properties.default_settings.model
 
 let appVersion = require('./../package.json').version;
 let appVersionNode = document.getElementById('appVersion');
