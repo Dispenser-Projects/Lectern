@@ -6,6 +6,7 @@ import "./sidebar"
 import "./styles/index.css"
 import {properties} from "./resources/Properties";
 import {BoxGeometry, BoxHelper, Material} from "three";
+import { rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
 
@@ -39,7 +40,7 @@ function initialize() {
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.x = -25;
     camera.position.y = 25;
-    camera.position.z = 25;
+    camera.position.z = 50;
 
     scene = new THREE.Scene();
 
@@ -142,18 +143,22 @@ function orbitSpeedEffect(){
         if (control.autoRotateSpeed > properties.orbit_speed){
             control.autoRotateSpeed = properties.orbit_speed
         }
+        return
     }
     if (control.autoRotateSpeed > properties.orbit_speed){
         control.autoRotateSpeed /= 1.05
         if (control.autoRotateSpeed < properties.orbit_speed){
             control.autoRotateSpeed = properties.orbit_speed
         }
+        return
     }
 }
 
 
 function animation(time: number) {
-    orbitSpeedEffect()
-    control.update()
+    if (rotatingAnim){
+        orbitSpeedEffect()
+        control.update()
+    }
     renderer.render(scene, camera);
 }

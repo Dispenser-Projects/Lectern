@@ -19,5 +19,6 @@ export const properties = {
         display_axes: true,
         display_grid: true,
         display_block_frame: false,
+        rotate_anim: true,
     }
 }

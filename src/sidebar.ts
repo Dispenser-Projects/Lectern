@@ -41,6 +41,10 @@ dispGridButton.onchange = () => dispGrid(dispGridButton.checked)
 const dispBlockFrameButton = <HTMLInputElement>document.getElementById("dispBlockFrame")
 dispBlockFrameButton.checked = properties.default_settings.display_block_frame
 dispBlockFrameButton.onchange = () => dispBlockFrame(dispBlockFrameButton.checked)
+export let rotatingAnim = properties.default_settings.rotate_anim
+const rotateAnimButton = <HTMLInputElement>document.getElementById("rotateAnim")
+rotateAnimButton.checked = rotatingAnim
+rotateAnimButton.onchange = () => rotatingAnim = rotateAnimButton.checked
 
 modelInput.value = properties.default_settings.model
 
