@@ -12,5 +12,7 @@ export const properties = {
     default_model: "slime_block",
     //@ts-ignore
     background_color: themeConfig.theme.colors.background['500'],
-    block_size: 16
+    block_size: 16,
+    orbit_speed: 2.0,
+    max_orbit_speed: 100.0,
 }

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {MapControls, OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {load} from './ModelLoader';
 import "./sidebar"
 
@@ -7,7 +7,7 @@ import "./styles/index.css"
 import {properties} from "./resources/Properties";
 import {BoxGeometry, BoxHelper, Material} from "three";
 
-let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh;
+let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
 
 initialize();
 loadModel(properties.default_model)
@@ -17,12 +17,15 @@ loadModel(properties.default_model)
  * Load the model <i>model</i> in the scene
  * @param model
  */
-export async function loadModel(model: string): Promise<THREE.Object3D<THREE.Event>> {
+export async function loadModel(model: string): Promise<any> {
     scene.remove(object)
     cleanupObject3D(object)
     return load(model, scene)
-        .then(o => object = o)
-        .then(o => scene.add(o))
+        .then(o => {
+            object = o
+            scene.add(object)
+            control.autoRotateSpeed = properties.max_orbit_speed
+        })
 }
 
 /**
@@ -54,7 +57,13 @@ function initialize() {
     dispGrid(true)
 
     /* Controls */
-    new OrbitControls(camera, renderer.domElement);
+    control = new OrbitControls(camera, renderer.domElement);
+    control.autoRotate = true
+    control.enableDamping = true
+    control.dampingFactor = 0.27
+    control.addEventListener('end', function(){
+        control.autoRotateSpeed = 0.01
+    })
 
     /* HTML */
     const container = document.getElementById('wrapper')
@@ -123,8 +132,24 @@ function cleanupMaterial(material: THREE.Material) {
     material.dispose();
 }
 
+function orbitSpeedEffect(){
+    if (control.autoRotateSpeed < properties.orbit_speed){
+        control.autoRotateSpeed *= 1.05
+        if (control.autoRotateSpeed > properties.orbit_speed){
+            control.autoRotateSpeed = properties.orbit_speed
+        }
+    }
+    if (control.autoRotateSpeed > properties.orbit_speed){
+        control.autoRotateSpeed /= 1.05
+        if (control.autoRotateSpeed < properties.orbit_speed){
+            control.autoRotateSpeed = properties.orbit_speed
+        }
+    }
+}
+
 
 function animation(time: number) {
+    orbitSpeedEffect()
+    control.update()
     renderer.render(scene, camera);
-
 }
