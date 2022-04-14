@@ -9,10 +9,7 @@ import {BoxGeometry, BoxHelper, Material} from "three";
 import { rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
-
-initialize();
-loadModel(properties.default_settings.model)
-
+const container = document.getElementById('wrapper')
 
 /**
  * Load the model <i>model</i> in the scene
@@ -36,8 +33,11 @@ export async function loadModel(model: string): Promise<any> {
  */
 function initialize() {
     console.log('world')
+
+    let containerSize = container.getBoundingClientRect()
+
     /* Camera */
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+    camera = new THREE.PerspectiveCamera(60, containerSize.width / containerSize.height, 1, 1000);
     camera.position.x = -25;
     camera.position.y = 25;
     camera.position.z = 50;
@@ -68,19 +68,17 @@ function initialize() {
     })
 
     /* Events */
-    window.addEventListener('resize', () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
+    const resizeObserver = new ResizeObserver(entries => {
+        let entry = entries[0]
+        renderer.setSize(entry.contentRect.width, entry.contentRect.height);
+        camera.aspect = entry.contentRect.width / entry.contentRect.height;
         camera.updateProjectionMatrix();
-    });
+      });
 
     /* HTML */
-    const container = document.getElementById('wrapper')
-    const element = document.createElement('div')
-    container.appendChild(element)
-    element.appendChild(renderer.domElement)
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement)
+    resizeObserver.observe(container);
+    renderer.setSize(containerSize.width, containerSize.height);
     renderer.setAnimationLoop(animation);
 }
 
@@ -162,3 +160,8 @@ function animation(time: number) {
     }
     renderer.render(scene, camera);
 }
+
+window.addEventListener("load", function(){
+    initialize();
+    loadModel(properties.default_settings.model)
+})

@@ -2,6 +2,11 @@ import {dispGrid, dispAxes, dispBlockFrame, loadModel} from "./index";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
+import resolveConfig from 'tailwindcss/resolveConfig'
+//@ts-ignore
+import tailwindConfig from '/tailwind.config.js'
+const themeConfig = resolveConfig(tailwindConfig)
+
 import "./styles/sidebar.css"
 import { properties } from "./resources/Properties";
 
@@ -53,16 +58,42 @@ let appVersionNode = document.getElementById('appVersion');
 appVersionNode.innerText = appVersion
 appVersionNode.classList.remove('d-none');
 
+// @ts-ignore
+const transitionSidebarDelay = themeConfig.theme.transitionDuration['150']
+sidebar.parentElement.style.backgroundColor = properties.background_color
 
 function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
         sidebar.classList.add('open')
-    } else
+        sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
+        sidebar.parentElement.style.paddingRight = `${sidebar.getBoundingClientRect().width}px`
+    } else {
         closeNav()
+        sidebar.parentElement.style.transitionDelay = '0s'
+        sidebar.parentElement.style.paddingRight = '0px'
+    }
 }
+
+const resizeObserver = new ResizeObserver(entries => {
+    let entry = entries[0]
+    if (sidebar.classList.contains('open')) {
+        sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
+        sidebar.parentElement.style.paddingRight = `${entry.contentRect.width}px`
+    } else {
+        sidebar.parentElement.style.transitionDelay = '0s'
+        sidebar.parentElement.style.paddingRight = '0px'
+
+    }
+    
+  });
+
+resizeObserver.observe(sidebar);
+
 
 function closeNav() {
     sidebar.classList.remove('open')
+    // sidebar.style.marginRight = `-${sidebar.offsetWidth}px`
+
 }
 
 function levenshteinDistance(str1: string, str2: string): number {
