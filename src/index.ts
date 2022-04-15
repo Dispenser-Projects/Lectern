@@ -6,7 +6,7 @@ import "./sidebar"
 import "./styles/index.css"
 import {properties} from "./resources/Properties";
 import {BoxGeometry, BoxHelper, Material, TextureLoader} from "three";
-import { rotatingAnim } from './sidebar';
+import { closeNav, rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
 const container = document.getElementById('wrapper')
@@ -62,6 +62,11 @@ function initialize() {
     control.addEventListener('end', function(){
         control.autoRotateSpeed = 0.01
     })
+    control.addEventListener('start', function(){
+        if (document.body.classList.contains('mobile-sidebar')){
+            closeNav()
+        }
+    })
 
     /* Events */
     const resizeObserver = new ResizeObserver(entries => {
@@ -103,7 +108,7 @@ export function dispBlockFrame(enabled: boolean) {
     if(enabled) {
         const geo = new THREE.BoxGeometry(properties.model.block_size, properties.model.block_size, properties.model.block_size);
         const material = new THREE.MeshBasicMaterial({
-            color: 0x192327,
+            color: properties.wireframe_color,
             wireframe: true
         });
 

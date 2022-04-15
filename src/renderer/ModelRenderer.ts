@@ -120,7 +120,7 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
 
     if(map.size === 0 || Array.from(map.values()).filter(t => t?.texture?.src !== undefined).length === 0)
         materials = new THREE.MeshBasicMaterial({
-            color: 0x192327,
+            color: properties.wireframe_color,
             wireframe: true
         });
     else {
@@ -130,7 +130,7 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
             const image = map.get(getName(value.texture))
             if(image?.texture?.src === undefined)
                 materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
-                    color: 0x192327,
+                    color: properties.wireframe_color,
                     wireframe: true
                 })
             else {

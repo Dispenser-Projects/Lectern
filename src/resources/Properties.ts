@@ -20,6 +20,8 @@ export const properties = {
     },
     //@ts-ignore
     background_color: themeConfig.theme.colors.background['100'],
+    // @ts-ignore
+    wireframe_color: themeConfig.theme.colors.background['500'],
     orbit_speed: 2.0,
     max_orbit_speed: 100.0,
     default_settings: {

@@ -20,11 +20,6 @@ let sidebar = document.getElementById("sidebar")
 let modelButton = <ValidateButton>document.getElementById("modelValidateButton")
 let modelInput = <HTMLInputElement>document.getElementById("modelInput")
 
-window.onload = function(){
-    sidebar.style.display = null
-    sidebar.classList.add('open')
-}
-
 modelButton.onclick = () => {
     modelButton.changeState('loading')
     modelButton.disabled = true;
@@ -33,7 +28,8 @@ modelButton.onclick = () => {
         .catch(e => { console.error(e); modelButton.changeState('error'); dispModelNotFound() })
         .finally(() => modelButton.disabled = false)
 }
-document.getElementById("sidebarOpenButton").onclick = clickNavButton
+const sidebarOpenButton = document.getElementById("sidebarOpenButton")
+sidebarOpenButton.onclick = clickNavButton
 backend.getAllModel().then(list => autocomplete(modelInput, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
@@ -64,35 +60,36 @@ sidebar.parentElement.style.backgroundColor = properties.background_color
 
 function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
-        sidebar.classList.add('open')
-        sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
-        sidebar.parentElement.style.paddingRight = `${sidebar.getBoundingClientRect().width}px`
+        openNav()
     } else {
         closeNav()
-        sidebar.parentElement.style.transitionDelay = '0s'
-        sidebar.parentElement.style.paddingRight = '0px'
     }
 }
 
 const resizeObserver = new ResizeObserver(entries => {
     let entry = entries[0]
+    calculateSidebarVisibility()
     if (sidebar.classList.contains('open')) {
         sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
         sidebar.parentElement.style.paddingRight = `${entry.contentRect.width}px`
-    } else {
-        sidebar.parentElement.style.transitionDelay = '0s'
-        sidebar.parentElement.style.paddingRight = '0px'
-
     }
     
   });
 
 resizeObserver.observe(sidebar);
 
+export function openNav() {
+    if ( sidebar.classList.contains('open') ) {return}
+    sidebar.classList.add('open')
+    sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
+    sidebar.parentElement.style.paddingRight = `${sidebar.getBoundingClientRect().width}px`
+}
 
-function closeNav() {
+export function closeNav() {
+    if ( !(sidebar.classList.contains('open')) ) {return}
     sidebar.classList.remove('open')
-    // sidebar.style.marginRight = `-${sidebar.offsetWidth}px`
+    sidebar.parentElement.style.transitionDelay = '0s'
+    sidebar.parentElement.style.paddingRight = '0px'
 
 }
 
@@ -303,10 +300,37 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         const icon = validateButton.querySelector(`[data-icon=${state}]`)
         icon.classList.remove('hidden')
         icon.classList.add('current-state')
-    }    
+    }
+
+    
 
     Object.defineProperty(validateButton, 'changeState', {
         value: changeState
     })
 
 }
+
+function calculateSidebarVisibility(): boolean{
+    sidebar.style.maxWidth = window.innerWidth - sidebarOpenButton.getBoundingClientRect().width + 'px'
+    if (sidebar.getBoundingClientRect().width > window.innerWidth / 2){
+        if (document.body.classList.contains('mobile-sidebar')) {return}
+        document.body.classList.add('mobile-sidebar')
+        closeNav()
+        return true
+    }
+    document.body.classList.remove('mobile-sidebar')
+    return false
+}
+
+
+
+window.addEventListener("load", () => {
+    console.log('window loaded')
+    sidebar.style.display = null
+    if ( !(calculateSidebarVisibility() )) {
+        openNav()
+    }
+
+})
+
+window.addEventListener("resize", calculateSidebarVisibility)
