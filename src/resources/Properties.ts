@@ -5,7 +5,7 @@ import tailwindConfig from '/tailwind.config.js'
 const themeConfig = resolveConfig(tailwindConfig)
 
 const version = "1.18.1"
-const base_url = `https://dispenser.gunivers.net/api/${version}/`
+const base_url = `https://dispenser.gunivers.net/api/${version}`
 
 export const properties = {
     backend: {

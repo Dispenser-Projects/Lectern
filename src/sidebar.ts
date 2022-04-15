@@ -30,7 +30,7 @@ modelButton.onclick = () => {
     modelButton.disabled = true;
     loadModel(modelInput.value)
         .then(() => modelButton.changeState('validate'))
-        .catch(() => modelButton.changeState('error'))
+        .catch(e => { console.error(e); modelButton.changeState('error') })
         .finally(() => modelButton.disabled = false)
 }
 document.getElementById("sidebarOpenButton").onclick = clickNavButton

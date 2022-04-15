@@ -2,14 +2,13 @@ import * as THREE from "three";
 import {McModel} from "../models/ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
-import {MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
+import {Material, MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
 import {axisToVector, convertPosition, rotateAboutPoint} from "../VectorUtils";
 import {Backend} from "../backend/Backend";
 import {ServerBackend} from "../backend/ServerBackend";
 import merge from 'deepmerge-json';
 import {properties} from "../resources/Properties";
 import {McTexture} from "./MinecraftTexture";
-import {McMetaModule} from "../models/McMetaInterface";
 import {SpriteSheetTexture} from "../utils/SpriteSheetTexture";
 
 const backend: Backend = new ServerBackend();
@@ -22,7 +21,7 @@ const block_size = properties.model.block_size
  * @param scene the scene where place the model
  */
 export function load(modelName: string, scene: THREE.Scene): Promise<THREE.Object3D> {
-    const sort = (model: Model) => sortArray(Object.entries(model.textures))
+    const sort = (model: Model) => sortArray(Object.entries(model.textures || []))
     const load = (model: Model) => loadTextureImages(sort(model), new Map<string, McTexture>())
     const group = new THREE.Group()
     return renderModel(modelName)
@@ -71,7 +70,11 @@ function loadTextureImages(list: Array<[string, string]>, map: Map<string, McTex
         } else {
             const image = new Image()
             image.crossOrigin = "anonymous"
-            image.src = backend.getTexture(getName(value))
+            try {
+                image.src = backend.getTexture(getName(value))
+            } catch(error) {
+                image.src = undefined
+            }
 
             return backend.getMcMetaFromTexture(getName(value))
                 .then(mcmeta => {
@@ -113,28 +116,48 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
     const size = element.to.map((k, i) => k - element.from[i])
     const base = new THREE.BoxGeometry(size[0], size[1], size[2])
 
-    const materials = new Array<MeshBasicMaterial>(6)
+    let materials: THREE.Material | Array<Material>
 
-    // Apply textures to all face of the Geometry
-    for (const [key, value] of Object.entries(element.faces)) {
-        const image = map.get(getName(value.texture))
-        const newImage = new Image()
-        newImage.crossOrigin = image.texture.crossOrigin
-        newImage.src = image.texture.src
-        const texture = image.mcmeta === undefined
-            ? createTexture(newImage)
-            : new SpriteSheetTexture({texture: newImage, mcmeta: image.mcmeta});
-        materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            alphaTest: 0.5
-        })
-        // Apply UV mapping to the texture
-        if(value.uv === undefined) {
-            const {x1, y1, x2, y2} = shapeToFaceCoords(element.from[0], element.from[1], element.from[2], element.to[0], element.to[1], element.to[2], key)
-            value.uv = [x1, y1, x2, y2]
+    if(map.size === 0 || Array.from(map.values()).filter(t => t?.texture?.src !== undefined).length === 0)
+        materials = new THREE.MeshBasicMaterial({
+            color: 0x192327,
+            wireframe: true
+        });
+    else {
+        materials = new Array<MeshBasicMaterial>(6)
+        // Apply textures to all face of the Geometry
+        for (const [key, value] of Object.entries(element.faces)) {
+            const image = map.get(getName(value.texture))
+            if(image?.texture?.src === undefined)
+                materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
+                    color: 0x192327,
+                    wireframe: true
+                })
+            else {
+                const newImage = new Image()
+                newImage.crossOrigin = image.texture.crossOrigin
+                newImage.src = image.texture.src
+                const texture = image.mcmeta === undefined
+                    ? createTexture(newImage)
+                    : new SpriteSheetTexture({texture: newImage, mcmeta: image.mcmeta});
+                materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    alphaTest: 0.5
+                })
+                // Apply UV mapping to the texture
+                if (value.uv === undefined) {
+                    const {
+                        x1,
+                        y1,
+                        x2,
+                        y2
+                    } = shapeToFaceCoords(element.from[0], element.from[1], element.from[2], element.to[0], element.to[1], element.to[2], key)
+                    value.uv = [x1, y1, x2, y2]
+                }
+                updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, key, value.rotation)
+            }
         }
-        updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, key, value.rotation)
     }
 
     const mesh = new THREE.Mesh(base, materials)
