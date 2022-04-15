@@ -193,7 +193,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         textInput.focus()
     }
 
-    function textInputKeyUp(event: KeyboardEvent) {
+    function textInputKey(event: KeyboardEvent) {
         // console.log(event.key)
         switch (event.key){
             case "ArrowDown":
@@ -209,6 +209,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                         break
                     case "ArrowUp":
                         if (autocompleteList.firstElementChild == selectedItem && userLastInput){
+                            event.preventDefault()
                             returnToLastUserValue()
                             return
                         }
@@ -239,7 +240,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         }
     }
 
-    textInput.onkeyup = textInputKeyUp
+    textInput.onkeydown = textInputKey
 
     autocompleteList.onfocus = function(event: FocusEvent){
         if (selectedItem){
@@ -253,7 +254,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
     }
 
-    autocompleteList.onkeyup = textInputKeyUp
+    autocompleteList.onkeydown = textInputKey
 
     function closeAutocompleteList(){
         autocompleteList.classList.add("hidden")
