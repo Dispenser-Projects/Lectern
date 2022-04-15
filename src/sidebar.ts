@@ -231,7 +231,8 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 event.preventDefault()
                 break
             case "Escape":
-                if (selectedItem){
+                event.preventDefault()
+                if (selectedItem && userLastInput){
                     returnToLastUserValue()
                     break
                 }
@@ -245,13 +246,10 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     autocompleteList.onfocus = function(event: FocusEvent){
         if (selectedItem){
             validateButton.focus()
+            return
         }
         event.preventDefault();
-        selectedItem?.classList.remove(styleSelectedItem)
-        selectedItem = autocompleteList.firstElementChild as HTMLElement
-        selectedItem.classList.add(styleSelectedItem)
-        selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
-
+        selectItem(autocompleteList.firstElementChild)
     }
 
     autocompleteList.onkeydown = textInputKey
