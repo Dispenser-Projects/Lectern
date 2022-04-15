@@ -154,8 +154,10 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
                         y2
                     } = shapeToFaceCoords(element.from[0], element.from[1], element.from[2], element.to[0], element.to[1], element.to[2], key)
                     value.uv = [x1, y1, x2, y2]
-                }
-                updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, key, value.rotation)
+                    updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, key, value.rotation)
+                } else
+                    // Reverse Y coordinates because Minecraft have (0, 0) in the top left corner whereas ThreeJS have in the bottom right corner
+                    updateTextureCoords(value.uv[0], block_size - value.uv[3], value.uv[2], block_size - value.uv[1], base, key, value.rotation)
             }
         }
     }
@@ -187,7 +189,8 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
  * @param angle the rotation angle to apply to the texture
  */
 function updateTextureCoords(x1: number, y1: number, x2: number, y2: number, geometry: THREE.BoxGeometry, face: string, angle: number) {
-    const faceNumber = faceToIndex(face)
+
+    let faceNumber = faceToIndex(face)
 
     const faceUvArray = rotateUv(angle,
         [x1 / block_size, y2 / block_size],

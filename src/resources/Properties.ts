@@ -25,7 +25,7 @@ export const properties = {
     orbit_speed: 2.0,
     max_orbit_speed: 100.0,
     default_settings: {
-        model: "slime_block",
+        model: "lectern",
         display_axes: false,
         display_grid: true,
         display_block_frame: false,

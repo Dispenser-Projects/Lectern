@@ -126,9 +126,9 @@ export function dispModelNotFound() {
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.LinearFilter
     const material = new THREE.MeshBasicMaterial({map: texture})
-    blockFrameHelper = new THREE.Mesh(geo, material)
     cleanupObject3D(object)
-    scene.add(blockFrameHelper);
+    object = new THREE.Mesh(geo, material)
+    scene.add(object);
 }
 
 
