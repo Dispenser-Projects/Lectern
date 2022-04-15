@@ -1,17 +1,20 @@
 import * as THREE from "three";
-import {McModel} from "./models/ModelInterface";
+import {McModel} from "../models/ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
-import {BoxGeometry, MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
-import {axisToVector, convertPosition, rotateAboutPoint} from "./VectorUtils";
-import {Backend} from "./backend/Backend";
-import {ServerBackend} from "./backend/ServerBackend";
+import {MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
+import {axisToVector, convertPosition, rotateAboutPoint} from "../VectorUtils";
+import {Backend} from "../backend/Backend";
+import {ServerBackend} from "../backend/ServerBackend";
 import merge from 'deepmerge-json';
-import {properties} from "./resources/Properties";
+import {properties} from "../resources/Properties";
+import {McTexture} from "./MinecraftTexture";
+import {McMetaModule} from "../models/McMetaInterface";
+import {SpriteSheetTexture} from "../utils/SpriteSheetTexture";
 
 const backend: Backend = new ServerBackend();
 const sortArray = (array: Array<[string, string]>) => array.sort((a, b) => a[1] > b[1] ? -1 : 1)
-const block_size = properties.block_size
+const block_size = properties.model.block_size
 
 /**
  * Load <i>modelName</i> model in the scene
@@ -20,10 +23,10 @@ const block_size = properties.block_size
  */
 export function load(modelName: string, scene: THREE.Scene): Promise<THREE.Object3D> {
     const sort = (model: Model) => sortArray(Object.entries(model.textures))
-    const load = (model: Model) => loadTextureImages(sort(model), new Map<string, HTMLImageElement>())
+    const load = (model: Model) => loadTextureImages(sort(model), new Map<string, McTexture>())
     const group = new THREE.Group()
-    return loadModel(modelName)
-        .then<[Model, Map<string, HTMLImageElement>]>(model => load(model).then(map => [model, map]))
+    return renderModel(modelName)
+        .then<[Model, Map<string, McTexture>]>(model => load(model).then(map => [model, map]))
         .then(model => model[0].elements.map(element => createElement(element, model[1], scene).object)
             .forEach(o => group.add(o))
         ).then(() => group)
@@ -36,10 +39,10 @@ export function load(modelName: string, scene: THREE.Scene): Promise<THREE.Objec
  * @param modelName the name of the model to load
  * @return a promise to the loaded model resulting of the mege of the requested model and all his parents
  */
-async function loadModel(modelName: string): Promise<Model> {
+async function renderModel(modelName: string): Promise<Model> {
     const model = await backend.getModel(modelName);
     // Load recursively parent and merge with the current model (if the parent exists)
-    return model.parent ? loadModel(getName(model.parent)).then(model2 => merge(model, model2)) : model;
+    return model.parent ? renderModel(getName(model.parent)).then(model2 => merge(model, model2)) : model;
 }
 
 /**
@@ -57,7 +60,7 @@ function getName(parent: string): string {
  * @param map a map texture variable to image loaded
  * @return a promise to a map where the key is a texture variable and the value is the loaded texture
  */
-function loadTextureImages(list: Array<[string, string]>, map: Map<string, HTMLImageElement>): Promise<Map<string, HTMLImageElement>> {
+function loadTextureImages(list: Array<[string, string]>, map: Map<string, McTexture>): Promise<Map<string, McTexture>> {
     if (list.length != 0) {
         const key = list[0][0] // The texture variable
         const value = list[0][1] // The texture to load
@@ -69,13 +72,12 @@ function loadTextureImages(list: Array<[string, string]>, map: Map<string, HTMLI
             const image = new Image()
             image.crossOrigin = "anonymous"
             image.src = backend.getTexture(getName(value))
-            map.set(`#${key}`, image)
-            return loadTextureImages(list.slice(1), map)
-            // Load texture from backend and add to the map
-            /*return backend.getTexture(getName(value))
-                .then(base64 => {console.log(base64); image.src = base64})
-                .then(_ => map.set(`#${key}`, image))
-                .then(_ => loadTextureImages(list.slice(1), map))*/
+
+            return backend.getMcMetaFromTexture(getName(value))
+                .then(mcmeta => {
+                    map.set(`#${key}`, { texture: image, mcmeta: mcmeta})
+                    return loadTextureImages(list.slice(1), map)
+                })
         }
     }
     return Promise.resolve(map)
@@ -100,7 +102,7 @@ function createTexture(image: HTMLImageElement): Texture {
  * @param scene the Scene where add the Mesh
  * @return an possible error
  */
-function createElement(element: Element, map: Map<string, HTMLImageElement>, scene: THREE.Scene): {error?: string, object: THREE.Mesh} {
+function createElement(element: Element, map: Map<string, McTexture>, scene: THREE.Scene): {error?: string, object: THREE.Mesh} {
     // Manager bounds of arrays
     if (element.from.length != 3)
         return {error: "Size of 'from' must be equal to 3.", object: undefined}
@@ -117,9 +119,11 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
     for (const [key, value] of Object.entries(element.faces)) {
         const image = map.get(getName(value.texture))
         const newImage = new Image()
-        newImage.crossOrigin = image.crossOrigin
-        newImage.src = image.src
-        const texture = createTexture(newImage);
+        newImage.crossOrigin = image.texture.crossOrigin
+        newImage.src = image.texture.src
+        const texture = image.mcmeta === undefined
+            ? createTexture(newImage)
+            : new SpriteSheetTexture({texture: newImage, mcmeta: image.mcmeta});
         materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
@@ -127,8 +131,8 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
         })
         // Apply UV mapping to the texture
         if(value.uv === undefined) {
-            const size = getFaceSizeFromGeometry(key, base)
-            value.uv = [0, 0, 16, 16]
+            const {x1, y1, x2, y2} = shapeToFaceCoords(element.from[0], element.from[1], element.from[2], element.to[0], element.to[1], element.to[2], key)
+            value.uv = [x1, y1, x2, y2]
         }
         updateTextureCoords(value.uv[0], value.uv[1], value.uv[2], value.uv[3], base, key, value.rotation)
     }
@@ -160,49 +164,14 @@ function createElement(element: Element, map: Map<string, HTMLImageElement>, sce
  * @param angle the rotation angle to apply to the texture
  */
 function updateTextureCoords(x1: number, y1: number, x2: number, y2: number, geometry: THREE.BoxGeometry, face: string, angle: number) {
-    const faceSize = getFaceSizeFromGeometry(face, geometry)
     const faceNumber = faceToIndex(face)
 
-    let faceUvArray
-    // if(faceNumber === 2)
-    //     faceUvArray = rotateUv(angle, [(x1 + 1) / faceSize.length, (faceSize.width - y1 - 1) / faceSize.length], [(x2 - 1) / block_size, (faceSize.width - y1 - 1) / faceSize.length], [(x1 + 1) / block_size, (block_size - y2 + 1) / faceSize.length], [(x2 - 1) / block_size, (block_size - y2 + 1) / faceSize.length])
-    // else
-    //     faceUvArray = rotateUv(angle, [(x1 + 1) / faceSize.length, (faceSize.width - y1 - 1) / faceSize.length], [(x2 - 1) / block_size, (faceSize.width - y1 - 1) / faceSize.length], [(x1 + 1) / block_size, (block_size - y2) / faceSize.length], [(x2 - 1) / block_size, (block_size - y2) / faceSize.length])
-
-    const diff = {length: block_size - faceSize.length, width: block_size - faceSize.width}
-
-    if(faceNumber === 2) {
-        console.log(geometry.parameters)
-        console.log(faceSize)
-        console.log([x1, y1, x2, y2])
-    }
-
-    // const xDiff = (block_size - faceSize.length) / 2
-    // const yDiff = (block_size - faceSize.width) / 2
-    // x1 = x1 + xDiff
-    // y1 = y1 + block_size - faceSize.width
-    // x2 = x2 - x1
-    // y2 = y2 - (y2 - block_size - y1 + faceSize.width)
-
-    if(faceNumber === 2) {
-        console.log([x1, y1, x2, y2])
-    }
-
-    faceUvArray = rotateUv(angle,
-        [x1 / block_size, (block_size - y1) / block_size],
-        [x2 / block_size, (block_size - y1) / block_size],
-        [x1 / block_size, (block_size - y2) / block_size],
-        [x2 / block_size, (block_size - y2) / block_size]
+    const faceUvArray = rotateUv(angle,
+        [x1 / block_size, y2 / block_size],
+        [x2 / block_size, y2 / block_size],
+        [x1 / block_size, y1 / block_size],
+        [x2 / block_size, y1 / block_size]
     )
-
-    y1 = y1 + faceSize.length
-
-    // faceUvArray = rotateUv(angle,
-    //     [(x1 + diff.length / 2) / block_size, (faceSize.width - y1) / faceSize.width],
-    //     [(x2 - diff.length / 2) / block_size, (faceSize.width - y1) / faceSize.width],
-    //     [(x1 + diff.length / 2) / block_size, (block_size - y2 + diff.length / 2) / faceSize.width],
-    //     [(x2 - diff.length / 2) / block_size, (block_size - y2 + diff.length / 2) / faceSize.width]
-    // )
 
     const array = Float32Array.from(geometry.getAttribute("uv").array)
     for (let i = 0; i < 8; i++)
@@ -252,6 +221,23 @@ function getFaceSizeFromGeometry(face: string, geometry: THREE.BoxGeometry): { l
 
 
     return {length: 0, width: 0}
+}
+
+function shapeToFaceCoords(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, face: string): { x1: number, y1: number, x2: number, y2: number } {
+    switch (face) {
+        case McModel.FaceEnum.EAST :
+            return {x1: z1, y1: y1, x2: z2, y2: y2}
+        case McModel.FaceEnum.WEST :
+            return {x1: z1, y1: y1, x2: z2, y2: y2}
+        case McModel.FaceEnum.UP   :
+            return {x1: x1, y1: z1, x2: x2, y2: z2}
+        case McModel.FaceEnum.DOWN :
+            return {x1: x1, y1: z1, x2: x2, y2: z2}
+        case McModel.FaceEnum.SOUTH:
+            return {x1: x1, y1: y1, x2: x2, y2: y2}
+        case McModel.FaceEnum.NORTH:
+            return {x1: x1, y1: y1, x2: x2, y2: y2}
+    }
 }
 
 /**
