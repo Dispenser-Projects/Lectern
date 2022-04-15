@@ -26,7 +26,7 @@ export function load(modelName: string, scene: THREE.Scene): Promise<THREE.Objec
     const group = new THREE.Group()
     return renderModel(modelName)
         .then<[Model, Map<string, McTexture>]>(model => load(model).then(map => [model, map]))
-        .then(model => model[0].elements.map(element => createElement(element, model[1], scene).object)
+        .then(model => model[0].elements?.map(element => createElement(element, model[1], scene).object)
             .forEach(o => group.add(o))
         ).then(() => group)
 
@@ -246,6 +246,17 @@ function getFaceSizeFromGeometry(face: string, geometry: THREE.BoxGeometry): { l
     return {length: 0, width: 0}
 }
 
+/**
+ * Get coordinates of a face from coordinates of the Geometry
+ * @param x1 the x1 coordinate of the geometry
+ * @param y1 the y1 coordinate of the geometry
+ * @param z1 the z1 coordinate of the geometry
+ * @param x2 the x2 coordinate of the geometry
+ * @param y2 the y2 coordinate of the geometry
+ * @param z2 the z2 coordinate of the geometry
+ * @param face the face to get coordinates
+ * @return an object containing coordinates of the face where (x1, y1) are the coordinates of the bottom left corner and (x2, y2) of the top right corner
+ */
 function shapeToFaceCoords(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, face: string): { x1: number, y1: number, x2: number, y2: number } {
     switch (face) {
         case McModel.FaceEnum.EAST :
