@@ -24,7 +24,10 @@ modelButton.onclick = () => {
     modelButton.changeState('loading')
     modelButton.disabled = true;
     loadModel(modelInput.value)
-        .then(() => modelButton.changeState('validate'))
+        .then(() => {
+            modelButton.changeState('validate')
+            closeNavIfMobile()
+        })
         .catch(e => { console.error(e); modelButton.changeState('error'); dispModelNotFound() })
         .finally(() => modelButton.disabled = false)
 }
@@ -91,6 +94,12 @@ export function closeNav() {
     sidebar.parentElement.style.transitionDelay = '0s'
     sidebar.parentElement.style.paddingRight = '0px'
 
+}
+
+export function closeNavIfMobile(){
+    if (document.body.classList.contains('mobile-sidebar')){
+        closeNav()
+    }
 }
 
 function levenshteinDistance(str1: string, str2: string): number {
@@ -325,7 +334,6 @@ function calculateSidebarVisibility(): boolean{
 
 
 window.addEventListener("load", () => {
-    console.log('window loaded')
     sidebar.style.display = null
     if ( !(calculateSidebarVisibility() )) {
         openNav()
