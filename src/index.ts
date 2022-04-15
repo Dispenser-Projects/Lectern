@@ -5,7 +5,7 @@ import "./sidebar"
 
 import "./styles/index.css"
 import {properties} from "./resources/Properties";
-import {BoxGeometry, BoxHelper, Material} from "three";
+import {BoxGeometry, BoxHelper, Material, TextureLoader} from "three";
 import { rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
@@ -106,12 +106,24 @@ export function dispBlockFrame(enabled: boolean) {
             color: 0x192327,
             wireframe: true
         });
+
         blockFrameHelper = new THREE.Mesh(geo, material)
         scene.add(blockFrameHelper);
     } else if (blockFrameHelper) {
         scene.remove(blockFrameHelper);
         cleanupMesh(blockFrameHelper)
     }
+}
+
+export function dispModelNotFound() {
+    const geo = new THREE.BoxGeometry(properties.model.block_size, properties.model.block_size, properties.model.block_size);
+    const texture = new TextureLoader().load("/bad_texture.png")
+    texture.magFilter = THREE.NearestFilter
+    texture.minFilter = THREE.LinearFilter
+    const material = new THREE.MeshBasicMaterial({map: texture})
+    blockFrameHelper = new THREE.Mesh(geo, material)
+    cleanupObject3D(object)
+    scene.add(blockFrameHelper);
 }
 
 
@@ -159,7 +171,7 @@ function animation(time: number) {
 
 }
 
-window.addEventListener("load", function(){
+window.addEventListener("load", function() {
     initialize();
     loadModel(properties.default_settings.model)
 })

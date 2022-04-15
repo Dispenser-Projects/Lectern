@@ -1,4 +1,4 @@
-import {dispGrid, dispAxes, dispBlockFrame, loadModel} from "./index";
+import {dispGrid, dispAxes, dispBlockFrame, loadModel, dispModelNotFound} from "./index";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
@@ -30,7 +30,7 @@ modelButton.onclick = () => {
     modelButton.disabled = true;
     loadModel(modelInput.value)
         .then(() => modelButton.changeState('validate'))
-        .catch(e => { console.error(e); modelButton.changeState('error') })
+        .catch(e => { console.error(e); modelButton.changeState('error'); dispModelNotFound() })
         .finally(() => modelButton.disabled = false)
 }
 document.getElementById("sidebarOpenButton").onclick = clickNavButton
