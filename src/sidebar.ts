@@ -159,7 +159,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
         autocompleteList.classList.remove("hidden")
         autocompleteList.innerHTML = ''
-        selectedItem = null
+        deselectItem()
         
         /*for each item in the array...*/
         arr.filter(e => e.includes(inputValue.toLowerCase()))
@@ -184,6 +184,8 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         textInput.focus()
         textInput.selectionStart = 0
         textInput.selectionEnd = textInput.value.length;
+
+        selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
     }
 
     let userLastInput: string
@@ -194,7 +196,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     function textInputKey(event: KeyboardEvent) {
-        // console.log(event.key)
         switch (event.key){
             case "ArrowDown":
             case "ArrowUp":
@@ -220,7 +221,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                         textInput.focus()
                         return
                 }
-                selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
                 event.preventDefault()
                 break
                 
@@ -256,6 +256,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
     function closeAutocompleteList(){
         autocompleteList.classList.add("hidden")
+        autocompleteList.innerHTML = ''
         selectedItem = null
     }
 
