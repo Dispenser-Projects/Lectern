@@ -1,6 +1,6 @@
 import * as THREE from 'three';
+import {load} from './renderer/ModelRenderer';
 import {MapControls, OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {load} from './ModelLoader';
 import "./sidebar"
 
 import "./styles/index.css"
@@ -9,22 +9,16 @@ import {BoxGeometry, BoxHelper, Material} from "three";
 import { rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
-
-initialize();
-loadModel(properties.default_settings.model)
-
+const container = document.getElementById('wrapper')
 
 /**
  * Load the model <i>model</i> in the scene
  * @param model
  */
 export async function loadModel(model: string): Promise<any> {
-    if (object){
-        scene.remove(object)
-        cleanupObject3D(object)
-    }
     return load(model, scene)
         .then(o => {
+            cleanupObject3D(object)
             object = o
             scene.add(object)
             control.autoRotateSpeed = properties.max_orbit_speed
@@ -35,9 +29,10 @@ export async function loadModel(model: string): Promise<any> {
  * Initialize the scene
  */
 function initialize() {
-    console.log('world')
+    let containerSize = container.getBoundingClientRect()
+
     /* Camera */
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+    camera = new THREE.PerspectiveCamera(60, containerSize.width / containerSize.height, 1, 1000);
     camera.position.x = -25;
     camera.position.y = 25;
     camera.position.z = 50;
@@ -69,19 +64,17 @@ function initialize() {
     })
 
     /* Events */
-    window.addEventListener('resize', () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
+    const resizeObserver = new ResizeObserver(entries => {
+        let entry = entries[0]
+        renderer.setSize(entry.contentRect.width, entry.contentRect.height);
+        camera.aspect = entry.contentRect.width / entry.contentRect.height;
         camera.updateProjectionMatrix();
-    });
+      });
 
     /* HTML */
-    const container = document.getElementById('wrapper')
-    const element = document.createElement('div')
-    container.appendChild(element)
-    element.appendChild(renderer.domElement)
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement)
+    resizeObserver.observe(container);
+    renderer.setSize(containerSize.width, containerSize.height);
     renderer.setAnimationLoop(animation);
 }
 
@@ -97,9 +90,9 @@ export function dispAxes(enabled: boolean) {
 
 export function dispGrid(enabled: boolean) {
     if(enabled) {
-        gridHelper = new THREE.GridHelper(properties.block_size, properties.block_size);
+        gridHelper = new THREE.GridHelper(properties.model.block_size, properties.model.block_size);
         scene.add(gridHelper);
-        gridHelper.position.y = -properties.block_size / 2
+        gridHelper.position.y = -properties.model.block_size / 2
     } else if (gridHelper) {
         scene.remove(gridHelper);
         axesHelper.dispose();
@@ -108,7 +101,7 @@ export function dispGrid(enabled: boolean) {
 
 export function dispBlockFrame(enabled: boolean) {
     if(enabled) {
-        const geo = new THREE.BoxGeometry(properties.block_size, properties.block_size, properties.block_size);
+        const geo = new THREE.BoxGeometry(properties.model.block_size, properties.model.block_size, properties.model.block_size);
         const material = new THREE.MeshBasicMaterial({
             color: 0x192327,
             wireframe: true
@@ -123,6 +116,7 @@ export function dispBlockFrame(enabled: boolean) {
 
 
 function cleanupObject3D(object: THREE.Object3D) {
+    scene.remove(object)
     if(object !== undefined)
         (object as THREE.Group).children.map(c => cleanupMesh(c as THREE.Mesh))
 }
@@ -162,4 +156,10 @@ function animation(time: number) {
         control.update()
     }
     renderer.render(scene, camera);
+
 }
+
+window.addEventListener("load", function(){
+    initialize();
+    loadModel(properties.default_settings.model)
+})

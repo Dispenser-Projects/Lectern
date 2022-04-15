@@ -1,53 +1,68 @@
 import * as THREE from "three";
 import {McMetaModule} from "../models/McMetaInterface";
-import McMeta = McMetaModule.McMeta;
 import Frame = McMetaModule.Frame;
 import {properties} from "../resources/Properties";
+import {McTexture} from "../renderer/MinecraftTexture";
+import {Texture} from "three";
 
-export class SpriteSheetTexture {
+const computeTime = (tick: number) => 1000 / properties.model.texture_animation_frequency * tick
 
-    private count: number
-    private readonly nbFrame: number
-    private y: number
-    private animation: Array<Frame>
+export class SpriteSheetTexture extends Texture {
 
-    constructor(image: HTMLImageElement, data: McMeta) {
-        let frameWidth = data.animation.width || properties.block_size
-        let frameHeight = data.animation.height || properties.block_size
+    constructor(texture: McTexture) {
+        super()
+        const data = texture.mcmeta
+        const image = texture.texture
+
+        let frameWidth = data.animation.width || properties.model.block_size
+        let frameHeight = data.animation.height || properties.model.block_size
         let timer: NodeJS.Timer
+        let y = 0;
+        let count = 0
+
         const canvas = document.createElement('canvas')
 
         const ctx = canvas.getContext('2d')
-
         const canvasTexture = new THREE.CanvasTexture(canvas)
+        const nbFrame = data.animation.frames?.length || image.height / frameHeight
+        const animation = adaptAnimation(data.animation?.frames, data.animation.frametime || 1)
+
+        canvasTexture.magFilter = THREE.NearestFilter
+        canvasTexture.minFilter = THREE.LinearFilter
+
         image.onload = () => {
             canvas.width = data.animation.width || image.width
-
-            canvas.height = data.animation.height || (image.height / frameWidth)
-            timer = setTimeout(this.nextFrame)
+            canvas.height = data.animation.height || (image.height / nbFrame)
+            timer = setTimeout(nextFrame, computeTime(animation[0].time))
         }
-        this.y = this.count = 0
-        this.nbFrame = data.animation.frames.length || image.height / frameHeight
-        this.animation = this.adaptAnimation(data.animation?.frames, data.animation.frametime || 1)
-        const startFrame = this.animation[0].index
+
+
+        function adaptAnimation(animation: Array<Frame | number> | undefined, frametime: number): Array<Frame> {
+            if (animation !== undefined)
+                return animation.map(f => getFrameData(f, frametime))
+            return [...Array(nbFrame).keys()].map(i => {
+                return {index: i, time: frametime}
+            })
+        }
+
+        function getFrameData(element: Frame | number, frametime: number): Frame {
+            if (typeof element == 'number')
+                return {index: element, time: frametime}
+            return element
+        }
+
+        function nextFrame() {
+            y = animation[count].index * frameHeight
+            count = (count + 1) % nbFrame
+
+            ctx.clearRect(0, 0, frameWidth, frameHeight)
+            ctx.drawImage(image, 0, y, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight)
+
+            canvasTexture.needsUpdate = true
+            timer = setTimeout(nextFrame, computeTime(animation[count].time))
+        }
+
+        return canvasTexture
     }
-
-    adaptAnimation(animation: Array<Frame | number> | undefined, frametime: number): Array<Frame> {
-        if(animation !== undefined)
-            return animation.map(f => this.getFrameData(f, frametime))
-        return [...Array(this.nbFrame).keys()].map(i => {return {index: i, time: frametime}})
-    }
-
-    getFrameData(element: Frame | number, frametime: number): Frame {
-        if(typeof element == 'number')
-            return { index: element, time: frametime }
-        return element
-    }
-
-    nextFrame() {
-        this.count = (this.count + 1) % this.nbFrame
-
-
-    }
-
 }
+

@@ -2,6 +2,11 @@ import {dispGrid, dispAxes, dispBlockFrame, loadModel} from "./index";
 import {Backend} from "./backend/Backend";
 import {ServerBackend} from "./backend/ServerBackend";
 
+import resolveConfig from 'tailwindcss/resolveConfig'
+//@ts-ignore
+import tailwindConfig from '/tailwind.config.js'
+const themeConfig = resolveConfig(tailwindConfig)
+
 import "./styles/sidebar.css"
 import { properties } from "./resources/Properties";
 
@@ -53,16 +58,42 @@ let appVersionNode = document.getElementById('appVersion');
 appVersionNode.innerText = appVersion
 appVersionNode.classList.remove('d-none');
 
+// @ts-ignore
+const transitionSidebarDelay = themeConfig.theme.transitionDuration['150']
+sidebar.parentElement.style.backgroundColor = properties.background_color
 
 function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
         sidebar.classList.add('open')
-    } else
+        sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
+        sidebar.parentElement.style.paddingRight = `${sidebar.getBoundingClientRect().width}px`
+    } else {
         closeNav()
+        sidebar.parentElement.style.transitionDelay = '0s'
+        sidebar.parentElement.style.paddingRight = '0px'
+    }
 }
+
+const resizeObserver = new ResizeObserver(entries => {
+    let entry = entries[0]
+    if (sidebar.classList.contains('open')) {
+        sidebar.parentElement.style.transitionDelay = transitionSidebarDelay
+        sidebar.parentElement.style.paddingRight = `${entry.contentRect.width}px`
+    } else {
+        sidebar.parentElement.style.transitionDelay = '0s'
+        sidebar.parentElement.style.paddingRight = '0px'
+
+    }
+    
+  });
+
+resizeObserver.observe(sidebar);
+
 
 function closeNav() {
     sidebar.classList.remove('open')
+    // sidebar.style.marginRight = `-${sidebar.offsetWidth}px`
+
 }
 
 function levenshteinDistance(str1: string, str2: string): number {
@@ -110,10 +141,16 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         validateButton.click()
     }
 
+    function deselectItem(){
+        selectedItem?.classList.remove(styleSelectedItem)
+        selectedItem = null
+    }
+
     /*Close the autocomplete list if the focus is lost*/
     function closeOnBlur(event: FocusEvent){
         const relatedTarget = <HTMLElement>event.relatedTarget;
         if (relatedTarget && (autocompleteList.contains(relatedTarget) || relatedTarget == textInput)) {return;}
+        deselectItem()
         closeAutocompleteList()
     }
 
@@ -153,7 +190,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
 
         autocompleteList.classList.remove("hidden")
         autocompleteList.innerHTML = ''
-        selectedItem = null
+        deselectItem()
         
         /*for each item in the array...*/
         arr.filter(e => e.includes(inputValue.toLowerCase()))
@@ -178,9 +215,18 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         textInput.focus()
         textInput.selectionStart = 0
         textInput.selectionEnd = textInput.value.length;
+
+        selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
     }
 
-    textInput.onkeyup = function(event: KeyboardEvent) {
+    let userLastInput: string
+    function returnToLastUserValue(){
+        textInput.value = userLastInput
+        deselectItem()
+        textInput.focus()
+    }
+
+    function textInputKey(event: KeyboardEvent) {
         switch (event.key){
             case "ArrowDown":
             case "ArrowUp":
@@ -190,15 +236,22 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                             selectItem(selectedItem.nextElementSibling)
                             break
                         }
+                        userLastInput = textInput.value
                         selectItem(autocompleteList.firstElementChild)
                         break
                     case "ArrowUp":
-                        if (selectedItem){
-                            selectItem(selectedItem.previousElementSibling)
+                        if (autocompleteList.firstElementChild == selectedItem && userLastInput){
+                            event.preventDefault()
+                            returnToLastUserValue()
+                            return
                         }
-                        break
+                        if (selectedItem && selectedItem.previousElementSibling){
+                            selectItem(selectedItem.previousElementSibling)
+                            break
+                        }
+                        textInput.focus()
+                        return
                 }
-                selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
                 event.preventDefault()
                 break
                 
@@ -208,11 +261,33 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 textInput.blur()
                 event.preventDefault()
                 break
+            case "Escape":
+                event.preventDefault()
+                if (selectedItem && userLastInput){
+                    returnToLastUserValue()
+                    break
+                }
+                textInput.blur()
+                break
         }
     }
 
+    textInput.onkeydown = textInputKey
+
+    autocompleteList.onfocus = function(event: FocusEvent){
+        if (selectedItem){
+            validateButton.focus()
+            return
+        }
+        event.preventDefault();
+        selectItem(autocompleteList.firstElementChild)
+    }
+
+    autocompleteList.onkeydown = textInputKey
+
     function closeAutocompleteList(){
         autocompleteList.classList.add("hidden")
+        autocompleteList.innerHTML = ''
         selectedItem = null
     }
 
