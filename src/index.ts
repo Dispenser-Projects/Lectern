@@ -1,6 +1,6 @@
 import * as THREE from 'three';
+import {load} from './renderer/ModelRenderer';
 import {MapControls, OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {load} from './ModelLoader';
 import "./sidebar"
 
 import "./styles/index.css"
@@ -19,12 +19,9 @@ loadModel(properties.default_settings.model)
  * @param model
  */
 export async function loadModel(model: string): Promise<any> {
-    if (object){
-        scene.remove(object)
-        cleanupObject3D(object)
-    }
     return load(model, scene)
         .then(o => {
+            cleanupObject3D(object)
             object = o
             scene.add(object)
             control.autoRotateSpeed = properties.max_orbit_speed
@@ -35,7 +32,7 @@ export async function loadModel(model: string): Promise<any> {
  * Initialize the scene
  */
 function initialize() {
-    console.log('world')
+
     /* Camera */
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.x = -25;
@@ -96,9 +93,9 @@ export function dispAxes(enabled: boolean) {
 
 export function dispGrid(enabled: boolean) {
     if(enabled) {
-        gridHelper = new THREE.GridHelper(properties.block_size, properties.block_size);
+        gridHelper = new THREE.GridHelper(properties.model.block_size, properties.model.block_size);
         scene.add(gridHelper);
-        gridHelper.position.y = -properties.block_size / 2
+        gridHelper.position.y = -properties.model.block_size / 2
     } else if (gridHelper) {
         scene.remove(gridHelper);
         axesHelper.dispose();
@@ -107,7 +104,7 @@ export function dispGrid(enabled: boolean) {
 
 export function dispBlockFrame(enabled: boolean) {
     if(enabled) {
-        const geo = new THREE.BoxGeometry(properties.block_size, properties.block_size, properties.block_size);
+        const geo = new THREE.BoxGeometry(properties.model.block_size, properties.model.block_size, properties.model.block_size);
         const material = new THREE.MeshBasicMaterial({
             color: 0x192327,
             wireframe: true
@@ -122,6 +119,7 @@ export function dispBlockFrame(enabled: boolean) {
 
 
 function cleanupObject3D(object: THREE.Object3D) {
+    scene.remove(object)
     if(object !== undefined)
         (object as THREE.Group).children.map(c => cleanupMesh(c as THREE.Mesh))
 }
@@ -161,4 +159,5 @@ function animation(time: number) {
         control.update()
     }
     renderer.render(scene, camera);
+
 }

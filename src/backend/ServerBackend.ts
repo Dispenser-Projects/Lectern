@@ -20,8 +20,7 @@ export class ServerBackend implements Backend {
      * @throws an error if the model is invalid
      */
     getModel(modelName: string): Promise<Model> {
-        return fetch(properties.backend_url_model + modelName, { mode: 'cors' }).then(response => {
-            console.log(response.status)
+        return fetch(properties.backend.url_model + modelName, {mode: 'cors'}).then(response => {
             if (response.ok)
                 return response.json();
             else
@@ -39,7 +38,7 @@ export class ServerBackend implements Backend {
      * @throws an error if the texture is invalid
      */
     getTexture(textureName: string): string {
-        return properties.backend_url_texture + textureName
+        return properties.backend.url_texture + textureName
     }
 
     /**
@@ -49,9 +48,9 @@ export class ServerBackend implements Backend {
      * @return the model processed
      */
     private setDefaultValue(model: Model): Model {
-        if(model.elements !== undefined)
-            for(const value of model.elements.flatMap(element => Object.values(element.faces))) {
-                if(value.rotation === undefined)
+        if (model.elements !== undefined)
+            for (const value of model.elements.flatMap(element => Object.values(element.faces))) {
+                if (value.rotation === undefined)
                     value.rotation = 0
             }
         return model
@@ -63,18 +62,15 @@ export class ServerBackend implements Backend {
      * @throws an error if the query is invalid
      */
     getAllModel(): Promise<Array<string>> {
-        if(this.modelArray != null)
+        if (this.modelArray != null)
             return new Promise(() => this.modelArray)
 
-        return (fetch(properties.backend_url_all_models + "?size=9999").then(response => {
+        return (fetch(properties.backend.url_model_list + "?size=9999").then(response => {
             if (response.ok)
                 return response.json();
             else
                 throw new Error("Invalid URL");
-        }).catch(error => {
-            console.log(error)
-            return Promise.reject();
-        }) as Promise<Page>)
+        }).catch(_ => Promise.reject()) as Promise<Page>)
             .then(page => page.elements.map(element => element.id))
             .then(array => this.modelArray = array.sort())
     }
@@ -85,11 +81,11 @@ export class ServerBackend implements Backend {
      * @return a promise for the mcmeta file or undefined if the texture hasn't ab associated mcmeta file
      */
     getMcMetaFromTexture(textureName: string): Promise<McMeta | undefined> {
-        return fetch(properties.backend_url_mcmeta + textureName)
-            .then(response => {
-                if(response.ok)
+        return fetch(properties.backend.url_mcmeta + textureName, {mode: 'cors'})
+            .then(async response => {
+                if (response.ok)
                     return response.json()
                 return undefined
-            }) as Promise<McMeta>
+            }).catch(_ => new Promise(undefined)) as Promise<McMeta>
     }
 }

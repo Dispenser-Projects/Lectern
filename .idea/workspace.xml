@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Resolving small compilation error following merge">
-      <change afterPath="$PROJECT_DIR$/src/models/McMetaInterface.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts" afterDir="false" />
+    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Improve auto-completion">
+      <change afterPath="$PROJECT_DIR$/src/renderer/MinecraftTexture.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/typing/Marvin.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/InterpolationManager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModelLoader.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/ModelRenderer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backend/Backend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/Backend.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backend/ServerBackend.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/backend/ServerBackend.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/resources/Properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +57,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="ts.external.directory.path" value="F:\Workbench\BlockRenderer\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -60,11 +67,11 @@
       <recent name="F:\Workbench\BlockRenderer\dist" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\typing" />
+      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\models" />
+      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\renderer" />
       <recent name="F:\Workbench\BlockRenderer\src\models" />
       <recent name="F:\Workbench\BlockRenderer\src" />
-      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\resources" />
-      <recent name="F:\Workbench\BlockRenderer\public" />
-      <recent name="F:\Workbench\BlockRenderer\src\scripts" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -141,6 +148,10 @@
       <workItem from="1649505849546" duration="24859000" />
       <workItem from="1649589397174" duration="6355000" />
       <workItem from="1649607365786" duration="3032000" />
+      <workItem from="1649780242507" duration="5261000" />
+      <workItem from="1649786747841" duration="1962000" />
+      <workItem from="1649873207345" duration="3650000" />
+      <workItem from="1649951894361" duration="12598000" />
     </task>
     <task id="LOCAL-00001" summary="Add more backend URL properties and add autocompletion list for model">
       <created>1642949728272</created>
@@ -186,6 +197,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add more backend URL properties and add autocompletion list for model" />
@@ -198,18 +210,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/ModelLoader.ts</url>
-          <line>206</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts</url>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/@types/node/timers.d.ts</url>
           <line>11</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
