@@ -19,11 +19,11 @@ export const properties = {
         texture_animation_frequency: 20
     },
     //@ts-ignore
-    background_color: themeConfig.theme.colors.background['500'],
+    background_color: themeConfig.theme.colors.background['100'],
     orbit_speed: 2.0,
     max_orbit_speed: 100.0,
     default_settings: {
-        model: "cake",
+        model: "slime_block",
         display_axes: false,
         display_grid: true,
         display_block_frame: false,
