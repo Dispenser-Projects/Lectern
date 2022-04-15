@@ -56,6 +56,7 @@ function initialize() {
     /* Controls */
     control = new OrbitControls(camera, renderer.domElement);
     control.autoRotate = true
+    control.enablePan = false
     control.enableDamping = true
     control.dampingFactor = 0.27
     control.addEventListener('end', function(){
