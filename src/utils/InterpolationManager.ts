@@ -1,12 +1,13 @@
-import {MarvinImage} from "marvinj/marvinj/src/image/MarvinImage";
+import {MarvinImage} from "marvinj-ts";
 
-export function interpolate(image1: MarvinImage, image2: MarvinImage, nbImage: number, array: Array<MarvinImage>) {
-    nbImage++
-    for(let i = 1; i < nbImage; i++)
-        computeImage(image1, image2, nbImage, i, array)
+export function interpolate(image1: MarvinImage, image2: MarvinImage, nbImage: number) {
+    const array: Array<MarvinImage> = []
+    for(let i = 0; i <= nbImage; i++)
+        array.push(computeImage(image1, image2, nbImage, i))
+    return array
 }
 
-function computeImage(image1: MarvinImage, image2: MarvinImage, nbImage: number, factor: number, array: Array<MarvinImage>) {
+function computeImage(image1: MarvinImage, image2: MarvinImage, nbImage: number, factor: number): MarvinImage {
     const img = image1.clone()
     for(let y = 0; y < image1.getHeight(); y++) {
         for(let x = 0; x < image1.getWidth(); x++) {
@@ -17,7 +18,7 @@ function computeImage(image1: MarvinImage, image2: MarvinImage, nbImage: number,
             img.setIntColor(x, y, alpha, red, green, blue);
         }
     }
-    array.push(img)
+    return img
 }
 
 function computePixel(px1: number, px2: number, nbFrame: number, factor: number) {

@@ -229,26 +229,6 @@ function faceToIndex(face: string): number {
     }
 }
 
-function getFaceSizeFromGeometry(face: string, geometry: THREE.BoxGeometry): { length: number, width: number } {
-    switch (face) {
-        case McModel.FaceEnum.EAST :
-            return {length: geometry.parameters.depth, width: geometry.parameters.height}
-        case McModel.FaceEnum.WEST :
-            return {length: geometry.parameters.depth, width: geometry.parameters.height}
-        case McModel.FaceEnum.UP   :
-            return {length: geometry.parameters.depth, width: geometry.parameters.width}
-        case McModel.FaceEnum.DOWN :
-            return {length: geometry.parameters.depth, width: geometry.parameters.width}
-        case McModel.FaceEnum.SOUTH:
-            return {length: geometry.parameters.width, width: geometry.parameters.height}
-        case McModel.FaceEnum.NORTH:
-            return {length: geometry.parameters.width, width: geometry.parameters.height}
-    }
-
-
-    return {length: 0, width: 0}
-}
-
 /**
  * Get coordinates of a face from coordinates of the Geometry
  * @param x1 the x1 coordinate of the geometry
