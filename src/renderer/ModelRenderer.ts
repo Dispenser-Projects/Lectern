@@ -3,13 +3,13 @@ import {McModel} from "../models/ModelInterface";
 import Model = McModel.Model;
 import Element = McModel.Element;
 import {Material, MathUtils, MeshBasicMaterial, Texture, Vector3} from "three";
-import {axisToVector, convertPosition, rotateAboutPoint} from "../VectorUtils";
+import {axisToVector, convertPosition, rotateAboutPoint} from "../utils/VectorUtils";
 import {Backend} from "../backend/Backend";
 import {ServerBackend} from "../backend/ServerBackend";
 import merge from 'deepmerge-json';
 import {properties} from "../resources/Properties";
 import {McTexture} from "./MinecraftTexture";
-import {SpriteSheetTexture} from "../utils/SpriteSheetTexture";
+import {SpriteSheetTexture} from "./SpriteSheetTexture";
 
 const backend: Backend = new ServerBackend();
 const sortArray = (array: Array<[string, string]>) => array.sort((a, b) => a[1] > b[1] ? -1 : 1)

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Finish animation management by adding interpolation #16">
+    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Add little optimisation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VectorUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/VectorUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/McMetaInterface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/McMetaInterface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/MinecraftTexture.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/MinecraftTexture.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer/ModelRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/ModelRenderer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/Properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/InterpolationManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/InterpolationManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/SpriteSheetTexture.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,11 +70,11 @@
       <recent name="F:\Workbench\BlockRenderer\dist" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Workbench\BlockRenderer\src\renderer" />
+      <recent name="F:\Workbench\BlockRenderer\src\utils" />
       <recent name="F:\Workbench\BlockRenderer\public" />
       <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\typing" />
       <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\models" />
-      <recent name="C:\Users\theog\WebstormProjects\Frontend-Block-Renderer\src\renderer" />
-      <recent name="F:\Workbench\BlockRenderer\src\models" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -152,7 +156,7 @@
       <workItem from="1649786747841" duration="1962000" />
       <workItem from="1649873207345" duration="3650000" />
       <workItem from="1649951894361" duration="12598000" />
-      <workItem from="1650100418621" duration="15318000" />
+      <workItem from="1650100418621" duration="21021000" />
     </task>
     <task id="LOCAL-00001" summary="Add more backend URL properties and add autocompletion list for model">
       <created>1642949728272</created>
@@ -217,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650137050559</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Add little optimisation">
+      <created>1650138128399</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1650138128399</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,7 +256,8 @@
     <MESSAGE value="Add 404 model if no model exists #23" />
     <MESSAGE value="Resolve UV Mapping for issue #28" />
     <MESSAGE value="Finish animation management by adding interpolation #16" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finish animation management by adding interpolation #16" />
+    <MESSAGE value="Add little optimisation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add little optimisation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -254,11 +266,6 @@
           <url>file://$PROJECT_DIR$/node_modules/@types/node/timers.d.ts</url>
           <line>11</line>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/utils/SpriteSheetTexture.ts</url>
-          <line>61</line>
-          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
