@@ -26,7 +26,7 @@ type LoadedFrame = {
 /**
  * New type of Texture to handle animated textures
  */
-export class SpriteSheetTexture extends CanvasTexture {
+export class AnimatedTexture extends CanvasTexture {
 
     /** The canvas of the CanvasTexture where to draw texture */
     readonly canvas: HTMLCanvasElement

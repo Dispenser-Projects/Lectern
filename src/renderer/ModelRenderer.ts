@@ -9,7 +9,7 @@ import {ServerBackend} from "../backend/ServerBackend";
 import merge from 'deepmerge-json';
 import {properties} from "../resources/Properties";
 import {McTexture} from "./MinecraftTexture";
-import {SpriteSheetTexture} from "./SpriteSheetTexture";
+import {AnimatedTexture} from "./AnimatedTexture";
 
 const backend: Backend = new ServerBackend();
 const sortArray = (array: Array<[string, string]>) => array.sort((a, b) => a[1] > b[1] ? -1 : 1)
@@ -137,7 +137,7 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
                 const newImage = image.texture.cloneNode(true) as HTMLImageElement
                 const texture = image.mcmeta === undefined
                     ? createTexture(newImage)
-                    : new SpriteSheetTexture({texture: newImage, mcmeta: image.mcmeta});
+                    : new AnimatedTexture({texture: newImage, mcmeta: image.mcmeta});
                 materials[faceToIndex(key)] = new THREE.MeshBasicMaterial({
                     map: texture,
                     transparent: true,
