@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import {load} from './renderer/ModelRenderer';
-import {MapControls, OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import "./sidebar"
 
 import "./styles/index.css"
 import {properties} from "./resources/Properties";
-import {BoxGeometry, BoxHelper, Material, TextureLoader} from "three";
-import { closeNav, rotatingAnim } from './sidebar';
+import {TextureLoader} from "three";
+import { closeNavIfMobile, rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
 const container = document.getElementById('wrapper')
@@ -63,9 +63,7 @@ function initialize() {
         control.autoRotateSpeed = 0.01
     })
     control.addEventListener('start', function(){
-        if (document.body.classList.contains('mobile-sidebar')){
-            closeNav()
-        }
+        closeNavIfMobile()
     })
 
     /* Events */
