@@ -8,6 +8,7 @@ import {toSlidingWindows} from "../utils/Utils";
 import {interpolate} from "./InterpolationManager";
 import {Marvin, MarvinImage} from "marvinj-ts";
 import McMeta = McMetaModule.McMeta;
+import {Observable} from "../utils/Observable";
 
 /**
  * Function to convert tick to milliseconds
@@ -39,7 +40,6 @@ export class AnimatedTexture extends CanvasTexture {
     /** The animation timer */
     timer: NodeJS.Timer
 
-
     /**
      * @param texture the Minecraft texture to animate
      */
@@ -48,16 +48,18 @@ export class AnimatedTexture extends CanvasTexture {
         super(canvas)
         this.canvas = canvas
         const data = texture.mcmeta
-
         const srcImage = new MarvinImage()
+
         this.frameWidth = data.animation.width || properties.model.block_size
         this.frameHeight = data.animation.height || properties.model.block_size
-
         const buildAndRun = () => {
+
             this.animation = this.buildAnimation(data, srcImage)
             this.nextFrame(0)
         }
         srcImage.load(texture.texture.src, buildAndRun)
+
+        playAnimationState.subscribe(this, setPlayAnimation(this))
     }
 
     /**
@@ -117,10 +119,24 @@ export class AnimatedTexture extends CanvasTexture {
      * @param count the frame's index to display, must be between 0 and the number of frame (exclude)
      */
     nextFrame(count: number) {
-        const newFrame = this.animation[count]
+        if(playAnimationState.value) {
+            const time = this.displayFrame(count)
+            this.timer = setTimeout(() => this.nextFrame((count + 1) % this.animation.length), computeTime(time))
+        } else {
+            this.displayFrame(0)
+        }
+    }
+
+    /**
+     * Display the frame associated to the index passed in parameter
+     * @param frameIndex the index of the frame to display
+     * @return the display time of the frame
+     */
+    displayFrame(frameIndex: number) {
+        const newFrame = this.animation[frameIndex]
         newFrame.image.draw(this.canvas, 0, 0, null)
         this.needsUpdate = true
-        this.timer = setTimeout(() => this.nextFrame((count + 1) % this.animation.length), computeTime(newFrame.time))
+        return newFrame.time
     }
 
     /**
@@ -148,5 +164,23 @@ export class AnimatedTexture extends CanvasTexture {
         Marvin.crop(srcImage, newImage, 0, frame.index * this.frameHeight, this.frameWidth, this.frameHeight)
         return {image: newImage, time: frame.time}
     }
+
 }
 
+/** If true, texture animation are played */
+export let playAnimationState: Observable<boolean> = new Observable(properties.model.play_texture_animation)
+
+
+/**
+ * @param instance this
+ * @param play if true, play texture animation, display the first texture of the animation otherwise
+ */
+const setPlayAnimation = (instance: AnimatedTexture) => (play: boolean) =>  {
+    if(play)
+        instance.nextFrame(0)
+    else {
+        instance.timer.unref()
+        instance.timer = undefined
+        instance.displayFrame(0)
+    }
+}

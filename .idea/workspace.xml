@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Give to SpriteSheetTexture class a more appropriate name">
+    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Resolve issue on sidebar completion">
+      <change afterPath="$PROJECT_DIR$/src/utils/Observable.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer/AnimatedTexture.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/AnimatedTexture.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/Properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/Properties.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sidebar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sidebar.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/Utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Utils.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +156,7 @@
       <workItem from="1649786747841" duration="1962000" />
       <workItem from="1649873207345" duration="3650000" />
       <workItem from="1649951894361" duration="12598000" />
-      <workItem from="1650100418621" duration="24493000" />
+      <workItem from="1650100418621" duration="28965000" />
     </task>
     <task id="LOCAL-00001" summary="Add more backend URL properties and add autocompletion list for model">
       <created>1642949728272</created>
@@ -238,7 +242,21 @@
       <option name="project" value="LOCAL" />
       <updated>1650144955290</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Improve auto-completion sorting by searching typed value in ID world prefixes instead of all the ID">
+      <created>1650148598562</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1650148598562</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Resolve issue on sidebar completion">
+      <created>1650152803737</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1650152803737</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,7 +287,9 @@
     <MESSAGE value="Add little optimisation" />
     <MESSAGE value="Refactor and documantation of the animation files" />
     <MESSAGE value="Give to SpriteSheetTexture class a more appropriate name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Give to SpriteSheetTexture class a more appropriate name" />
+    <MESSAGE value="Improve auto-completion sorting by searching typed value in ID world prefixes instead of all the ID" />
+    <MESSAGE value="Resolve issue on sidebar completion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resolve issue on sidebar completion" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

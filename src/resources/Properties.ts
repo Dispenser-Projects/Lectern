@@ -16,7 +16,8 @@ export const properties = {
     },
     model: {
         block_size: 16,
-        texture_animation_frequency: 20
+        texture_animation_frequency: 20,
+        play_texture_animation: true
     },
     //@ts-ignore
     background_color: themeConfig.theme.colors.background['100'],

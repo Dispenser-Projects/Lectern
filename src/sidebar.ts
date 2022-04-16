@@ -9,6 +9,7 @@ const themeConfig = resolveConfig(tailwindConfig)
 
 import "./styles/sidebar.css"
 import { properties } from "./resources/Properties";
+import {playAnimationState} from "./renderer/AnimatedTexture";
 
 interface ValidateButton extends HTMLButtonElement{
     changeState: (target: 'validate'|'loading'|'error') => void;
@@ -49,6 +50,9 @@ export let rotatingAnim = properties.default_settings.rotate_anim
 const rotateAnimButton = <HTMLInputElement>document.getElementById("rotateAnim")
 rotateAnimButton.checked = rotatingAnim
 rotateAnimButton.onchange = () => rotatingAnim = rotateAnimButton.checked
+const playTextureAnimationButton = <HTMLInputElement>document.getElementById("playTextureAnimation")
+playTextureAnimationButton.checked = properties.model.play_texture_animation
+playTextureAnimationButton.onchange = () => playAnimationState.setValue(playTextureAnimationButton.checked)
 
 modelInput.value = properties.default_settings.model
 
