@@ -134,9 +134,7 @@ function createElement(element: Element, map: Map<string, McTexture>, scene: THR
                     wireframe: true
                 })
             else {
-                const newImage = new Image()
-                newImage.crossOrigin = image.texture.crossOrigin
-                newImage.src = image.texture.src
+                const newImage = image.texture.cloneNode(true) as HTMLImageElement
                 const texture = image.mcmeta === undefined
                     ? createTexture(newImage)
                     : new SpriteSheetTexture({texture: newImage, mcmeta: image.mcmeta});

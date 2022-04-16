@@ -25,7 +25,7 @@ export const properties = {
     orbit_speed: 2.0,
     max_orbit_speed: 100.0,
     default_settings: {
-        model: "chain_command_block",
+        model: "slime_block",
         display_axes: false,
         display_grid: true,
         display_block_frame: false,
