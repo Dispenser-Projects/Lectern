@@ -164,17 +164,19 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         autocompleteList.style.maxHeight = `calc(${sidebar.clientHeight - autocompleteList.getBoundingClientRect().top}px - 1.75rem)`
     }
 
-    function toHtmlElement(str: string, searchedValue: string): HTMLLIElement {
+    function toHtmlElement(result: MatchResult): HTMLLIElement {
         let b = document.createElement("li");
         b.setAttribute('role', 'option')
-        // b.setAttribute('tabindex', '0')
+
+        const typed = result.id.slice(result.startIndex, result.endIndex)
+
         /*make the matching letters bold:*/
-        const index = str.toLowerCase().indexOf(searchedValue.toLowerCase())
-        b.innerHTML = str.substr(0, index)
-        b.innerHTML += "<strong>" + str.substr(index, searchedValue.length) + "</strong>";
-        b.innerHTML += str.substr(index + searchedValue.length);
+        b.innerHTML = result.id.slice(0, result.startIndex)
+        b.innerHTML += "<span class='text-primary'>" + typed + "</span>"
+        b.innerHTML += result.id.slice(result.endIndex, result.id.length)
+
         /*save the name*/
-        b.dataset.name = str;
+        b.dataset.name = typed;
 
         b.addEventListener("click", function(_: any) {
             selectAutocomplete(this)
@@ -189,6 +191,8 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         return b
     }
 
+    type MatchResult = {id: string, startIndex: number, endIndex: number}
+
     /*execute a function when someone writes in the text field:*/
     textInput.oninput = function() {
         let inputValue = textInput.value;
@@ -199,14 +203,24 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         deselectItem()
         
         /*for each item in the array...*/
-        arr.filter(e => e.includes(inputValue.toLowerCase()))
-        .map(s => [levenshteinDistance(inputValue, s), s] as [number, string])
-        .sort((s1, s2) => s1[0] - s2[0])
-        .map(s => toHtmlElement(s[1], inputValue))
-        .forEach(v => autocompleteList.append(v))
-        
+        arr.map(e => wordStartWith(inputValue.toLowerCase(), e))
+            .filter(e => e !== undefined)
+            .map(s => [levenshteinDistance(inputValue, s.id), s] as [number, MatchResult])
+            .sort((s1, s2) => s1[0] - s2[0])
+            .map(s => toHtmlElement(s[1]))
+            .forEach(v => autocompleteList.append(v))
+
         calculateHeightAutocompleteList()
         autocompleteList.scrollTo({top: 0});
+    }
+
+    function wordStartWith(input: string, id: string): MatchResult | undefined {
+        if(!input.match(/[a-z0-9_]/))
+            return
+        const regex = new RegExp(`(?<=^|_)${input}`)
+        const match = regex.exec(id)
+
+        return match ? { id: id, startIndex: match.index, endIndex: match.index + input.length } : undefined
     }
 
     function selectItem(target: any){

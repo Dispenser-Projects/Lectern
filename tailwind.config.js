@@ -8,7 +8,7 @@ function withOpacityValue(variable) {
 }
 
 module.exports = {
-  content: ["./src/**/*.{html,js}", "./public/**/*.{html,js}"],
+  content: ["./src/**/*.{html,js,ts}", "./public/**/*.{html,js,ts}"],
   theme: {
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],

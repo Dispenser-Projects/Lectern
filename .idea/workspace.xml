@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Refactor and documantation of the animation files">
-      <change beforePath="$PROJECT_DIR$/src/renderer/ModelRenderer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/ModelRenderer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/SpriteSheetTexture.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer/AnimatedTexture.ts" afterDir="false" />
+    <list default="true" id="eb016952-8438-43c6-8663-3867d5274234" name="Default Changelist" comment="Give to SpriteSheetTexture class a more appropriate name">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sidebar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sidebar.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +152,7 @@
       <workItem from="1649786747841" duration="1962000" />
       <workItem from="1649873207345" duration="3650000" />
       <workItem from="1649951894361" duration="12598000" />
-      <workItem from="1650100418621" duration="21116000" />
+      <workItem from="1650100418621" duration="24493000" />
     </task>
     <task id="LOCAL-00001" summary="Add more backend URL properties and add autocompletion list for model">
       <created>1642949728272</created>
@@ -230,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650144874507</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Give to SpriteSheetTexture class a more appropriate name">
+      <created>1650144955290</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1650144955290</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,7 +268,8 @@
     <MESSAGE value="Finish animation management by adding interpolation #16" />
     <MESSAGE value="Add little optimisation" />
     <MESSAGE value="Refactor and documantation of the animation files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor and documantation of the animation files" />
+    <MESSAGE value="Give to SpriteSheetTexture class a more appropriate name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Give to SpriteSheetTexture class a more appropriate name" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
