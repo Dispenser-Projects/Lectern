@@ -176,7 +176,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         b.innerHTML += result.id.slice(result.endIndex, result.id.length)
 
         /*save the name*/
-        b.dataset.name = typed;
+        b.dataset.name = result.id;
 
         b.addEventListener("click", function(_: any) {
             selectAutocomplete(this)
