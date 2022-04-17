@@ -22,27 +22,9 @@ let sidebar = document.getElementById("sidebar")
 let modelButton = <ValidateButton>document.getElementById("modelValidateButton")
 let modelInput = <HTMLInputElement>document.getElementById("modelInput")
 
-modelButton.onclick = () => {
-    modelButton.changeState('loading')
-    modelButton.disabled = true;
-    loadModel(modelInput.value)
-        .then(() => {
-            modelButton.changeState('validate')
-            closeNavIfMobile()
-        })
-        .catch(e => { 
-            console.error(e);
-            modelButton.changeState('error');
-            dispModelNotFound()
-            if (e.message){
-                createToast('Error', e.message, 3000)
-            }
-        })
-        .finally(() => modelButton.disabled = false)
-}
+
 const sidebarOpenButton = document.getElementById("sidebarOpenButton")
 sidebarOpenButton.onclick = clickNavButton
-backend.getAllModel().then(list => autocomplete(modelInput, list))
 
 // document.getElementById("sidebarCloseButton").onclick = closeNav
 const dispAxesButton = <HTMLInputElement>document.getElementById("dispAxes")
@@ -321,13 +303,17 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         const icon = validateButton.querySelector(`[data-icon=${state}]`)
         icon.classList.remove('hidden')
         icon.classList.add('current-state')
-    }
 
-    
+        if (state == 'validate' || state == 'error'){
+            modelButton.disabled = false;
+        }
+    }
 
     Object.defineProperty(validateButton, 'changeState', {
         value: changeState
     })
+
+    textInput.disabled = false
 
 }
 
@@ -346,6 +332,30 @@ function calculateSidebarVisibility(): boolean{
 
 
 window.addEventListener("load", () => {
+    backend.getAllModel().then(list => {
+        autocomplete(modelInput, list)
+        modelButton.changeState('validate')
+    })
+
+    modelButton.onclick = () => {
+        modelButton.changeState('loading')
+        modelButton.disabled = true;
+        loadModel(modelInput.value)
+            .then(() => {
+                modelButton.changeState('validate')
+                closeNavIfMobile()
+            })
+            .catch(e => { 
+                console.error(e);
+                modelButton.changeState('error');
+                dispModelNotFound()
+                if (e.message){
+                    createToast('Error', e.message, 3000)
+                }
+            })
+            .finally(() => modelButton.disabled = false)
+    }
+
     sidebar.style.display = null
     if ( !(calculateSidebarVisibility() )) {
         openNav()
