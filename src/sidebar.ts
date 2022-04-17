@@ -144,11 +144,14 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     let selectedItem: HTMLElement = null
     const styleSelectedItem = "selected"
 
-    function selectAutocomplete(target: HTMLElement){
+    function selectAutocomplete(target: HTMLElement, validate: boolean = true){
         if ( !(target) ){return;}
-        textInput.value = target.dataset.name
+        selectItem(target)
+        textInput.value = selectedItem.dataset.name
         closeAutocompleteList()
-        validateButton.click()
+        if (validate){
+            validateButton.click()
+        }
     }
 
     function deselectItem(){
@@ -174,7 +177,6 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         
         let b = document.createElement("li");
         b.setAttribute('role', 'option')
-        b.classList.add('text-text/40')
         b.appendChild(document.createTextNode(result.id.slice(0, result.startIndex)))
         let ba = document.createElement("span")
         ba.classList.add('text-text')
@@ -218,7 +220,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
             .forEach(v => autocompleteList.append(v))
 
         calculateHeightAutocompleteList()
-        autocompleteList.scrollTo({top: 0});
+        selectItem(autocompleteList.firstElementChild)
     }
 
     function wordStartWith(input: string, id: string): MatchResult | undefined {
@@ -238,19 +240,7 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
         selectedItem = target
         selectedItem.classList.add(styleSelectedItem)
 
-        textInput.value = selectedItem.dataset.name
-        textInput.focus()
-        textInput.selectionStart = 0
-        textInput.selectionEnd = textInput.value.length;
-
         selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"})
-    }
-
-    let userLastInput: string
-    function returnToLastUserValue(){
-        textInput.value = userLastInput
-        deselectItem()
-        textInput.focus()
     }
 
     function textInputKey(event: KeyboardEvent) {
@@ -263,13 +253,11 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                             selectItem(selectedItem.nextElementSibling)
                             break
                         }
-                        userLastInput = textInput.value
                         selectItem(autocompleteList.firstElementChild)
                         break
                     case "ArrowUp":
-                        if (autocompleteList.firstElementChild == selectedItem && userLastInput){
+                        if (autocompleteList.firstElementChild == selectedItem){
                             event.preventDefault()
-                            returnToLastUserValue()
                             return
                         }
                         if (selectedItem && selectedItem.previousElementSibling){
@@ -284,33 +272,21 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 
             case "Enter":
                 selectAutocomplete(selectedItem)
-                validateButton.click()
                 textInput.blur()
                 event.preventDefault()
                 break
             case "Escape":
                 event.preventDefault()
-                if (selectedItem && userLastInput){
-                    returnToLastUserValue()
-                    break
-                }
                 textInput.blur()
+                break
+            case "Tab":
+                event.preventDefault()
+                selectAutocomplete(selectedItem, false)
                 break
         }
     }
 
-    textInput.onkeydown = textInputKey
-
-    autocompleteList.onfocus = function(event: FocusEvent){
-        if (selectedItem){
-            validateButton.focus()
-            return
-        }
-        event.preventDefault();
-        selectItem(autocompleteList.firstElementChild)
-    }
-
-    autocompleteList.onkeydown = textInputKey
+    textInput.onkeydown = autocompleteList.onkeydown = textInputKey
 
     function closeAutocompleteList(){
         autocompleteList.classList.add("hidden")

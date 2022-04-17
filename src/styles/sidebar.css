@@ -13,7 +13,7 @@
 }
 
 .autocomplete-list li{
-    @apply px-4 py-2 cursor-pointer w-full truncate;
+    @apply px-4 py-2 cursor-pointer w-full truncate text-text/40;
 }
 
 .autocomplete-list li:hover{
