@@ -121,7 +121,7 @@ export function dispBlockFrame(enabled: boolean) {
 
 export function dispModelNotFound() {
     const geo = new THREE.BoxGeometry(properties.model.block_size, properties.model.block_size, properties.model.block_size);
-    const texture = new TextureLoader().load("/bad_texture.png")
+    const texture = new TextureLoader().load(properties.base_url + "bad_texture.png")
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.LinearFilter
     const material = new THREE.MeshBasicMaterial({map: texture})

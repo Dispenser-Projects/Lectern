@@ -4,15 +4,18 @@ import tailwindConfig from '/tailwind.config.js'
 
 const themeConfig = resolveConfig(tailwindConfig)
 
+const base_url = "/"
+
 const version = "1.18.1"
-const base_url = `https://dispenser.gunivers.net/api/${version}`
+const backend_url = `https://dispenser.gunivers.net/api/${version}`
 
 export const properties = {
+    base_url: base_url,
     backend: {
-        url_texture: `${base_url}/block/texture/`,
-        url_model: `${base_url}/block/model/`,
-        url_mcmeta: `${base_url}/block/mcmeta/`,
-        url_model_list: `${base_url}/block/models/`
+        url_texture: `${backend_url}/block/texture/`,
+        url_model: `${backend_url}/block/model/`,
+        url_mcmeta: `${backend_url}/block/mcmeta/`,
+        url_model_list: `${backend_url}/block/models/`
     },
     model: {
         block_size: 16,
