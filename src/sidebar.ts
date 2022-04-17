@@ -169,15 +169,18 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
     }
 
     function toHtmlElement(result: MatchResult): HTMLLIElement {
+        
+        const typed = result.id.slice(result.startIndex, result.endIndex)
+        
         let b = document.createElement("li");
         b.setAttribute('role', 'option')
-
-        const typed = result.id.slice(result.startIndex, result.endIndex)
-
-        /*make the matching letters bold:*/
-        b.innerHTML = result.id.slice(0, result.startIndex)
-        b.innerHTML += "<span class='text-primary'>" + typed + "</span>"
-        b.innerHTML += result.id.slice(result.endIndex, result.id.length)
+        b.classList.add('text-text/40')
+        b.appendChild(document.createTextNode(result.id.slice(0, result.startIndex)))
+        let ba = document.createElement("span")
+        ba.classList.add('text-text')
+        ba.textContent = typed
+        b.appendChild(ba)
+        b.appendChild(document.createTextNode(result.id.slice(result.endIndex, result.id.length)))
 
         /*save the name*/
         b.dataset.name = result.id;

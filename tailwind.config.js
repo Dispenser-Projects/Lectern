@@ -16,7 +16,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: '#3062eb',
         text: withOpacityValue('--color-text'),
         'paper': {
           DEFAULT: '#1A2327',
