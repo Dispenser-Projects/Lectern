@@ -271,9 +271,16 @@ function autocomplete(textInput: HTMLInputElement, arr: string[]) {
                 break
                 
             case "Enter":
-                selectAutocomplete(selectedItem)
-                textInput.blur()
                 event.preventDefault()
+
+                if (selectedItem){
+                    selectAutocomplete(selectedItem)
+                    textInput.blur()
+                    break
+                }
+
+                validateButton.click()
+                
                 break
             case "Escape":
                 event.preventDefault()
