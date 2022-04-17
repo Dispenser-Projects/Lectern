@@ -179,7 +179,7 @@ const setPlayAnimation = (instance: AnimatedTexture) => (play: boolean) =>  {
     if(play)
         instance.nextFrame(0)
     else {
-        instance.timer.unref()
+        clearTimeout(instance.timer)
         instance.timer = undefined
         instance.displayFrame(0)
     }
