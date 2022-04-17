@@ -89,7 +89,6 @@ export class ServerBackend implements Backend {
             .then(async response => {
                 if (response.ok)
                     return response.json()
-                return Promise.reject()
             }).catch(_ => new Promise(undefined)) as Promise<McMeta>
     }
 }
