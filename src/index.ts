@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {load} from './renderer/ModelRenderer';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import "./sidebar"
+import "./toast"
 
 import "./styles/index.css"
 import {properties} from "./resources/Properties";

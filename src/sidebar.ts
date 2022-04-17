@@ -10,6 +10,7 @@ const themeConfig = resolveConfig(tailwindConfig)
 import "./styles/sidebar.css"
 import { properties } from "./resources/Properties";
 import {playAnimationState} from "./renderer/AnimatedTexture";
+import { createToast } from "./toast";
 
 interface ValidateButton extends HTMLButtonElement{
     changeState: (target: 'validate'|'loading'|'error') => void;
@@ -29,7 +30,14 @@ modelButton.onclick = () => {
             modelButton.changeState('validate')
             closeNavIfMobile()
         })
-        .catch(e => { console.error(e); modelButton.changeState('error'); dispModelNotFound() })
+        .catch(e => { 
+            console.error(e);
+            modelButton.changeState('error');
+            dispModelNotFound()
+            if (e.message){
+                createToast('Error', e.message, 3000)
+            }
+        })
         .finally(() => modelButton.disabled = false)
 }
 const sidebarOpenButton = document.getElementById("sidebarOpenButton")
