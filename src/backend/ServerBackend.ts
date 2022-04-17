@@ -23,11 +23,13 @@ export class ServerBackend implements Backend {
         return fetch(properties.backend.url_model + modelName, {mode: 'cors'}).then(response => {
             if (response.ok)
                 return response.json();
-            else
-                throw new Error("Invalid Model");
+            else {
+                console.error("Invalid Model");
+                return Promise.reject("Invalid Model")
+            }
         }).catch(error => {
             console.log(error)
-            return Promise.reject();
+            return Promise.reject(error);
         }).then(this.setDefaultValue) as Promise<Model>
     }
 
@@ -68,8 +70,10 @@ export class ServerBackend implements Backend {
         return (fetch(properties.backend.url_model_list + "?size=9999").then(response => {
             if (response.ok)
                 return response.json();
-            else
-                throw new Error("Invalid URL");
+            else {
+                console.error("Invalid URL")
+                return Promise.reject("Invalid URL");
+            }
         }).catch(_ => Promise.reject()) as Promise<Page>)
             .then(page => page.elements.map(element => element.id))
             .then(array => this.modelArray = array.sort())
@@ -85,7 +89,7 @@ export class ServerBackend implements Backend {
             .then(async response => {
                 if (response.ok)
                     return response.json()
-                return undefined
+                return Promise.reject()
             }).catch(_ => new Promise(undefined)) as Promise<McMeta>
     }
 }
