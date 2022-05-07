@@ -6,7 +6,7 @@ const themeConfig = resolveConfig(tailwindConfig)
 
 const base_url = "/"
 
-const version = "1.18.1"
+const version = "1.18.2"
 const backend_url = `https://dispenser.gunivers.net/api/${version}`
 
 export const properties = {
