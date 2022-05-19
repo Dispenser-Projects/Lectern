@@ -11,7 +11,8 @@ interface UrlOptions {
     q?: string,
     rotanim?: 'true'|'false',
     interactive?: 'true'|'false',
-    embeded?: 'true'|'false'
+    embedded?: 'true'|'false',
+    zoom?: string,
 }
 
 var url_params: UrlOptions = hash.split('&').reduce(function (res, item) {
@@ -55,5 +56,6 @@ export const properties = {
         rotate_anim: (url_params.rotanim == 'false')? false : true,
     },
     interactive: (url_params.interactive == 'false' )? false : true,
-    embeded: (url_params.embeded == 'true' )? true : false,
+    embedded: (url_params.embedded == 'true' )? true : false,
+    zoom: (url_params.zoom && Number(url_params.zoom))? Number(url_params.zoom) : 60,
 }

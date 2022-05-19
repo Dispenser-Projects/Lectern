@@ -53,7 +53,9 @@ appVersionNode.classList.remove('d-none');
 
 // @ts-ignore
 const transitionSidebarDelay = themeConfig.theme.transitionDuration['150']
-sidebar.parentElement.style.backgroundColor = properties.background_color
+if(properties.embedded = false){
+    sidebar.parentElement.style.backgroundColor = properties.background_color
+}
 
 function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
@@ -356,7 +358,7 @@ window.addEventListener("load", () => {
             .finally(() => modelButton.disabled = false)
     }
 
-    if (properties.embeded = false){
+    if (properties.embedded = false){
         sidebar.style.display = null
     }
 

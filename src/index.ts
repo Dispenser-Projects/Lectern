@@ -6,7 +6,7 @@ import "./toast"
 
 import "./styles/index.css"
 import {properties} from "./resources/Properties";
-import {TextureLoader} from "three";
+import {BufferGeometryLoader, TextureLoader} from "three";
 import { closeNavIfMobile, rotatingAnim } from './sidebar';
 
 let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, object: THREE.Object3D, axesHelper: THREE.AxesHelper, gridHelper: THREE.GridHelper, blockFrameHelper: THREE.Mesh, control: OrbitControls;
@@ -33,7 +33,7 @@ function initialize() {
     let containerSize = container.getBoundingClientRect()
 
     /* Camera */
-    camera = new THREE.PerspectiveCamera(60, containerSize.width / containerSize.height, 1, 1000);
+    camera = new THREE.PerspectiveCamera(properties.zoom, containerSize.width / containerSize.height, 1, 1000);
     camera.position.x = -25;
     camera.position.y = 25;
     camera.position.z = 50;
@@ -42,7 +42,9 @@ function initialize() {
 
     /* Renderer */
     renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-    renderer.setClearColor(properties.background_color)
+    if(properties.embedded = false){
+        renderer.setClearColor(properties.background_color)
+    }
 
     /* Light */
     const light = new THREE.AmbientLight(0xFFFFFF)
@@ -66,6 +68,7 @@ function initialize() {
     control.addEventListener('start', function(){
         closeNavIfMobile()
     })
+    control.enabled = properties.interactive
 
     /* Events */
     const resizeObserver = new ResizeObserver(entries => {
@@ -176,6 +179,10 @@ function animation(time: number) {
 }
 
 window.addEventListener("load", function() {
+    if(properties.embedded = true){
+        // document.body.style.background = 'transparent';
+        document.body.style.backgroundColor = 'transparent';
+    }
     initialize();
     loadModel(properties.default_settings.model)
 })
