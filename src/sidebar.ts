@@ -356,7 +356,10 @@ window.addEventListener("load", () => {
             .finally(() => modelButton.disabled = false)
     }
 
-    sidebar.style.display = null
+    if (properties.embeded = false){
+        sidebar.style.display = null
+    }
+
     if ( !(calculateSidebarVisibility() )) {
         openNav()
     }
