@@ -41,7 +41,7 @@ const rotateAnimButton = <HTMLInputElement>document.getElementById("rotateAnim")
 rotateAnimButton.checked = rotatingAnim
 rotateAnimButton.onchange = () => rotatingAnim = rotateAnimButton.checked
 const playTextureAnimationButton = <HTMLInputElement>document.getElementById("playTextureAnimation")
-playTextureAnimationButton.checked = properties.model.play_texture_animation
+playTextureAnimationButton.checked = properties.default_settings.play_texture_animation
 playTextureAnimationButton.onchange = () => playAnimationState.setValue(playTextureAnimationButton.checked)
 
 modelInput.value = properties.default_settings.model
@@ -53,7 +53,9 @@ appVersionNode.classList.remove('d-none');
 
 // @ts-ignore
 const transitionSidebarDelay = themeConfig.theme.transitionDuration['150']
-sidebar.parentElement.style.backgroundColor = properties.background_color
+if(properties.embedded = false){
+    sidebar.parentElement.style.backgroundColor = properties.background_color
+}
 
 function clickNavButton() {
     if (!sidebar.classList.contains('open')) {
@@ -356,7 +358,10 @@ window.addEventListener("load", () => {
             .finally(() => modelButton.disabled = false)
     }
 
-    sidebar.style.display = null
+    if (properties.embedded = false){
+        sidebar.style.display = null
+    }
+
     if ( !(calculateSidebarVisibility() )) {
         openNav()
     }
