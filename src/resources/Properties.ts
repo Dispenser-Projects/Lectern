@@ -9,10 +9,11 @@ var hash = window.location.hash.substr(1);
 
 interface UrlOptions {
     q?: string,
-    rotanim?: 'true'|'false',
+    rotate_anim?: 'true'|'false',
     interactive?: 'true'|'false',
     embedded?: 'true'|'false',
     zoom?: string,
+    texture_anim?: 'true'|'false',
 }
 
 var url_params: UrlOptions = hash.split('&').reduce(function (res, item) {
@@ -40,7 +41,6 @@ export const properties = {
     model: {
         block_size: 16,
         texture_animation_frequency: 20,
-        play_texture_animation: true
     },
     // @ts-expect-error
     background_color: themeConfig.theme.colors.background['100'],
@@ -51,9 +51,10 @@ export const properties = {
     default_settings: {
         model: (url_params.q)? url_params.q : "slime_block",
         display_axes: false,
-        display_grid: true,
+        display_grid: (url_params.embedded == 'true' )? false : true,
         display_block_frame: false,
-        rotate_anim: (url_params.rotanim == 'false')? false : true,
+        rotate_anim: (url_params.rotate_anim == 'false')? false : true,
+        play_texture_animation: (url_params.texture_anim == 'false')? false:true,
     },
     interactive: (url_params.interactive == 'false' )? false : true,
     embedded: (url_params.embedded == 'true' )? true : false,

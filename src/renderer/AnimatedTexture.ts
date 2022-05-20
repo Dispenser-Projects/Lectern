@@ -168,7 +168,7 @@ export class AnimatedTexture extends CanvasTexture {
 }
 
 /** If true, texture animation are played */
-export let playAnimationState: Observable<boolean> = new Observable(properties.model.play_texture_animation)
+export let playAnimationState: Observable<boolean> = new Observable(properties.default_settings.play_texture_animation)
 
 
 /**

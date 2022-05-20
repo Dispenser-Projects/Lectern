@@ -41,7 +41,7 @@ const rotateAnimButton = <HTMLInputElement>document.getElementById("rotateAnim")
 rotateAnimButton.checked = rotatingAnim
 rotateAnimButton.onchange = () => rotatingAnim = rotateAnimButton.checked
 const playTextureAnimationButton = <HTMLInputElement>document.getElementById("playTextureAnimation")
-playTextureAnimationButton.checked = properties.model.play_texture_animation
+playTextureAnimationButton.checked = properties.default_settings.play_texture_animation
 playTextureAnimationButton.onchange = () => playAnimationState.setValue(playTextureAnimationButton.checked)
 
 modelInput.value = properties.default_settings.model
