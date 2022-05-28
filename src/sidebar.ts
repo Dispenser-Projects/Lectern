@@ -53,7 +53,7 @@ appVersionNode.classList.remove('d-none');
 
 // @ts-ignore
 const transitionSidebarDelay = themeConfig.theme.transitionDuration['150']
-if(properties.embedded = false){
+if(properties.embedded == false){
     sidebar.parentElement.style.backgroundColor = properties.background_color
 }
 

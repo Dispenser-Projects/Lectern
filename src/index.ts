@@ -42,7 +42,7 @@ function initialize() {
 
     /* Renderer */
     renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-    if(properties.embedded = false){
+    if(properties.embedded == false){
         renderer.setClearColor(properties.background_color)
     }
 
