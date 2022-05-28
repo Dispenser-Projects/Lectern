@@ -179,7 +179,7 @@ function animation(time: number) {
 }
 
 window.addEventListener("load", function() {
-    if(properties.embedded = true){
+    if(properties.embedded == true){
         // document.body.style.background = 'transparent';
         document.body.style.backgroundColor = 'transparent';
     }

@@ -358,7 +358,7 @@ window.addEventListener("load", () => {
             .finally(() => modelButton.disabled = false)
     }
 
-    if (properties.embedded = false){
+    if (properties.embedded == false){
         sidebar.style.display = null
     }
 
