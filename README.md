@@ -1,8 +1,8 @@
 # Minecraft-Block-Renderer
 
-Block Renderer is a Web Minecraft block... renderer (yeah, really).  
+Lectern is a Web Minecraft block renderer.  
 The ultimate goal is to be able to display all Minecraft models, export them to image, import his own resource pack...
-Resources (models, textures, etc) are provided by a [REST API backend](https://github.com/theogiraudet/Backend-Block-Renderer).
+Resources (models, textures, etc) are provided by a [REST API backend](https://github.com/Dispenser-Projects/Dispenser-API).
 
 ![](/docs/images/main_image.png)
 
