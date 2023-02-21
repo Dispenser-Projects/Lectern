@@ -1,4 +1,4 @@
-# Minecraft-Block-Renderer
+# Lectern
 
 Lectern is a Web Minecraft block renderer.  
 The ultimate goal is to be able to display all Minecraft models, export them to image, import his own resource pack...
